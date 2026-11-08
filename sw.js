@@ -1,9 +1,10 @@
 /* KALOS — Service Worker: עבודה בלי אינטרנט (למשל בפארק)
    - ניווט: רשת קודם, ואם אין חיבור — index.html מהמטמון
    - קבצים מקומיים: stale-while-revalidate (מהיר, ומתעדכן ברקע)
-   - גופנים, תמונות Pexels ותמונות ממוזערות של YouTube: מטמון ריצה מוגבל בגודל
-   - הטמעות YouTube לא נשמרות במטמון */
-const VERSION = 'kalos-v3'; /* להעלות בכל שינוי בקבצים המקומיים */
+   - גופנים ותמונות מקומיים: גופנים במטמון מראש, תמונות נשמרות כשהן נצפות
+   - אין תלות ברשת חיצונית: סרטוני Kalo נוצרים בדפדפן
+   - בקשות OpenStreetMap (מצא פארק) ומפות מוטמעות עוברות ישר לרשת ולא נשמרות */
+const VERSION = 'kalos-v6'; /* להעלות בכל שינוי בקבצים המקומיים */
 const CORE = VERSION + '-core';
 const RUNTIME = VERSION + '-runtime';
 const RUNTIME_MAX = 120;
@@ -12,34 +13,51 @@ const PRECACHE = [
   './',
   'index.html',
   'manifest.webmanifest',
+  'assets/css/fonts.css',
   'assets/css/style.css',
   'assets/css/workout.css',
   'assets/css/me.css',
   'assets/css/skilltree.css',
   'assets/css/tools.css',
+  'assets/css/kalo.css',
+  'assets/css/parks.css',
+  'assets/css/programs.css',
+  'assets/css/a11y.css',
   'assets/js/figure.js',
   'assets/js/data.js',
   'assets/js/exercises-extra.js',
   'assets/js/exercises-more.js',
+  'assets/js/kalo.js',
   'assets/js/builder.js',
   'assets/js/core.js',
+  'assets/js/a11y.js',
+  'assets/js/i18n.js',
+  'assets/i18n/en.js',
   'assets/js/features-data.js',
   'assets/js/theme.js',
   'assets/js/skilltree.js',
   'assets/js/assess.js',
   'assets/js/tools.js',
   'assets/js/workout.js',
+  'assets/js/programs-plan.js',
   'assets/js/tracker.js',
   'assets/js/share.js',
   'assets/js/app.js',
+  'assets/js/parks.js',
   'assets/js/pwa.js',
+  'assets/fonts/heebo-hebrew.woff2',
+  'assets/fonts/heebo-latin.woff2',
+  'assets/fonts/rubik-hebrew.woff2',
+  'assets/fonts/rubik-latin.woff2',
+  'assets/img/flag-s.webp',
+  'assets/img/flag-l.webp',
   'assets/icons/icon.svg',
   'assets/icons/icon-192.png',
   'assets/icons/icon-512.png',
   'assets/icons/maskable-512.png',
 ];
 
-const RUNTIME_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'images.pexels.com', 'i.ytimg.com'];
+const RUNTIME_HOSTS = [];
 const NEVER_CACHE = /(^|\.)youtube(-nocookie)?\.com$|(^|\.)googlevideo\.com$/;
 
 self.addEventListener('install', (e) => {

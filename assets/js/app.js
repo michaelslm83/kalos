@@ -213,7 +213,7 @@
           <span class="lvl" title="רמה: ${KX.levels[ex.level]}">${[1, 2, 3].map((n) => `<i class="${n <= ex.level ? 'on' : ''}"></i>`).join('')}</span></div>
         </div>
         <div class="ex-body"><h3>${esc(ex.name)}</h3><p class="en">${esc(ex.en)}</p><p class="mus">${esc(ex.muscles.join(' · '))}</p>
-          <div class="ex-foot"><span class="rx">${esc(ex.rx)}</span><span class="go">הדגמה ${icon('i-arrow')}</span></div></div>`;
+          <div class="ex-foot"><span class="rx">${esc(KX.bidi(ex.rx))}</span><span class="go">הדגמה ${icon('i-arrow')}</span></div></div>`;
       cell.appendChild(card);
       cell.insertAdjacentHTML('beforeend', favBtnHTML('ex', ex.id, ex.name));
       grid.appendChild(cell);
@@ -288,7 +288,7 @@
 
   /* ---------- modal ---------- */
   const modal = $('#exModal'), mFig = $('#mFig'), mCap = $('#mCap'), mDots = $('#mDots'), mStage = $('.m-stage', modal);
-  let mPlayer = null, mEx = null, mTab = 'steps', mOrder = [];
+  let mPlayer = null, mEx = null, mTab = 'steps', mOrder = [], mMovie = null;
   function setPlayIcon(playing) {
     $('#mPlay').innerHTML = icon(playing ? 'i-pause' : 'i-play');
     $('#mPlay').setAttribute('aria-label', playing ? 'השהה' : 'נגן');
@@ -317,16 +317,14 @@
     if (mTab === 'cues') html = `<ul class="ilist good">${ex.cues.map((s) => `<li>${icon('i-check')}<span>${esc(s)}</span></li>`).join('')}</ul>`;
     if (mTab === 'mistakes') html = `<ul class="ilist bad">${ex.mistakes.map((s) => `<li>${icon('i-x')}<span>${esc(s)}</span></li>`).join('')}</ul>` + (mPlayer.bad ? `<button class="btn btn-ghost btn-sm" id="showBad" style="margin-top:8px">${icon('i-play')} הצג את הטעות בהדגמה</button>` : '');
     if (mTab === 'prog') html = `<div class="pgrid"><div class="e"><small>קל יותר ↓</small><p>${esc(ex.easier)}</p></div><div class="h"><small>קשה יותר ↑</small><p>${esc(ex.harder)}</p></div></div>`;
-    if (mTab === 'video') {
-      const v = KX.videos[ex.id];
-      if (v) html = facadeHTML(v) + `<p class="vnote">${esc(v.title)} · ${esc(v.ch)}</p>`;
-      else html = `<a class="ytlink" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(ex.en + ' tutorial calisthenics')}">${icon('i-yt')}<span><b>חפש הדרכות ל־${esc(ex.en)} ב־YouTube</b><small>ייפתח בלשונית חדשה</small></span></a><p class="vnote">בינתיים, ההדגמה המונפשת מציגה את הביצוע הנכון ואת הטעות הנפוצה.</p>`;
-    }
+    if (mTab === 'video') html = `<div class="m-movie"></div><p class="vnote">סרטון Kalo: ביצוע נכון, השרירים שעובדים, צעד אחר צעד בהילוך איטי, הטעויות הנפוצות ואיך לתקן אותן.</p>`;
+    if (mMovie) { mMovie.destroy(); mMovie = null; }
     pane.innerHTML = html;
     pane.style.animation = 'none'; void pane.offsetWidth; pane.style.animation = '';
     const sb = $('#showBad', pane);
     if (sb) sb.addEventListener('click', () => { setMode('bad'); if (!mPlayer.playing) { mPlayer.play(); setPlayIcon(true); } });
-    bindFacades(pane);
+    const mv = $('.m-movie', pane);
+    if (mv) mMovie = new KX.kalo.Movie(mv, ex, { autoplay: true, onPlay: () => { if (mPlayer && mPlayer.playing) { mPlayer.pause(); setPlayIcon(false); } } });
   }
   function openEx(id) {
     const ex = KX.exMap[id]; if (!ex) return;
@@ -344,11 +342,11 @@
     mPlayer.reset();
     if (!reduce) mPlayer.play();
     setPlayIcon(!reduce);
-    $('#mTags').innerHTML = `<span class="tag" style="color:${catColor(ex.cat)}"><i></i>${KX.cats[ex.cat].name}</span><span class="tag">${KX.levels[ex.level]}</span>` + (KX.videos[ex.id] ? `<span class="tag">${icon('i-play')} כולל וידאו</span>` : '') + favBtnHTML('ex', ex.id, ex.name).replace('fav-btn', 'fav-btn fav-inline');
+    $('#mTags').innerHTML = `<span class="tag" style="color:${catColor(ex.cat)}"><i></i>${KX.cats[ex.cat].name}</span><span class="tag">${KX.levels[ex.level]}</span>` + `<button type="button" class="tag tag-btn" data-go="video">${icon('i-play')} סרטון Kalo</button>` + favBtnHTML('ex', ex.id, ex.name).replace('fav-btn', 'fav-btn fav-inline');
     $('#mTitle').textContent = ex.name;
     $('#mEn').textContent = ex.en;
     $('#mSum').textContent = ex.summary;
-    $('#mMeta').innerHTML = `<div><dt>מינון מומלץ</dt><dd>${esc(ex.rx)}</dd></div><div><dt>ציוד</dt><dd>${esc(ex.equip)}</dd></div><div><dt>שרירים עיקריים</dt><dd>${esc(ex.muscles.slice(0, 2).join(', '))}</dd></div>`;
+    $('#mMeta').innerHTML = `<div><dt>מינון מומלץ</dt><dd>${esc(KX.bidi(ex.rx))}</dd></div><div><dt>ציוד</dt><dd>${esc(ex.equip)}</dd></div><div><dt>שרירים עיקריים</dt><dd>${esc(ex.muscles.slice(0, 2).join(', '))}</dd></div>`;
     mTab = 'steps';
     $$('#mTabs button').forEach((b) => b.setAttribute('aria-selected', b.dataset.tab === mTab));
     renderPane();
@@ -367,6 +365,8 @@
     mPlayer.setSpeed(+b.dataset.speed);
     $$('#mSpeed button').forEach((x) => x.setAttribute('aria-checked', x === b));
   });
+  $('#mTags').addEventListener('click', (e) => { if (e.target.closest('[data-go="video"]')) $('#mTabs [data-tab="video"]').click(); });
+  modal.addEventListener('cancel', (e) => { if (mMovie && mMovie.root.classList.contains('km-pseudo')) { e.preventDefault(); mMovie.toggleFs(); } });
   $('#mTabs').addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return;
     mTab = b.dataset.tab;
@@ -376,7 +376,8 @@
   $('#mTabs').addEventListener('keydown', (e) => {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     const bs = $$('#mTabs button'), i = bs.findIndex((b) => b.dataset.tab === mTab);
-    const n = bs[(i + (e.key === 'ArrowLeft' ? 1 : -1) + bs.length) % bs.length];
+    const fwd = document.dir === 'ltr' ? 'ArrowRight' : 'ArrowLeft';
+    const n = bs[(i + (e.key === fwd ? 1 : -1) + bs.length) % bs.length];
     n.click(); n.focus();
   });
   const step = (d) => { const i = mOrder.indexOf(mEx.id) + d; if (mOrder[i]) openEx(mOrder[i]); };
@@ -387,34 +388,15 @@
   modal.addEventListener('close', () => {
     if (modal.open) return; /* נפתח מחדש מיד — מעבר בין תרגילים */
     if (mPlayer) mPlayer.pause();
-    $$('#mPane .facade').forEach((f) => (f.innerHTML = ''));
+    if (mMovie) { mMovie.destroy(); mMovie = null; }
     history.replaceState(null, '', location.pathname + location.search);
   });
   modal.addEventListener('keydown', (e) => {
     if (e.target.closest('input, #mTabs')) return;
-    if (e.key === 'ArrowLeft') step(1);
-    if (e.key === 'ArrowRight') step(-1);
+    const fwd = document.dir === 'ltr' ? 'ArrowRight' : 'ArrowLeft', back = fwd === 'ArrowRight' ? 'ArrowLeft' : 'ArrowRight';
+    if (e.key === fwd) step(1);
+    if (e.key === back) step(-1);
   });
-
-  /* ---------- video facades ---------- */
-  function facadeHTML(v) {
-    return `<button class="facade" data-yt="${esc(v.id)}" aria-label="נגן: ${esc(v.title)}"><img loading="lazy" src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="" /><span class="pbtn">${icon('i-play')}</span></button>`;
-  }
-  function bindFacades(root) {
-    $$('.facade[data-yt]', root).forEach((f) => f.addEventListener('click', () => {
-      const id = f.dataset.yt;
-      if (location.protocol === 'file:') { window.open('https://www.youtube.com/watch?v=' + id, '_blank', 'noopener'); return; }
-      const ifr = document.createElement('iframe');
-      ifr.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
-      ifr.title = f.getAttribute('aria-label');
-      ifr.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      ifr.allowFullscreen = true;
-      ifr.referrerPolicy = 'strict-origin-when-cross-origin';
-      const box = Object.assign(document.createElement('div'), { className: 'facade' });
-      box.appendChild(ifr);
-      f.replaceWith(box);
-    }, { once: true }));
-  }
 
   /* ---------- progressions ---------- */
   let progI = 0;
@@ -459,6 +441,7 @@
         <div class="pd-blocks">${p.blocks.map((b) => `<div class="pd-block"><h4>${esc(b.h)}</h4><ul>${b.items.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}</div>
         <p class="callout">${icon('i-bolt')}<span><b>כלל התקדמות:</b> ${esc(p.rule)}</span></p>
       </div>`;
+    if (KX.progUI) KX.progUI.render($('#progDetail'), p);
   }
   renderPg();
   function selectProgram(i) {
@@ -531,7 +514,7 @@
       <ol class="wkstrip" aria-label="לוח שבועי">${plan.days.map((d) => `<li class="${d.rest ? 'off' : 'on'}"><b>${d.day}</b><span>${d.rest ? 'מנוחה' : esc(d.name)}</span></li>`).join('')}</ol>
       <div class="week">${plan.days.map((d, di) => d.rest ? '' :
         `<div class="day" style="animation-delay:${di * 40}ms"><div class="day-h"><b>יום ${d.day}</b><small>${esc(d.name)}</small></div><ul>${d.items.map((it) => `
-            <li class="${it.skill ? 'sk' : ''}"><span>${it.ex ? `<button class="nm" data-ex="${it.ex}">${esc(it.n)}</button>` : `<span class="nm">${esc(it.n)}</span>`}${it.note ? `<span class="note">${esc(it.note)}</span>` : ''}</span><span class="rx">${esc(it.rx)}</span></li>`).join('')}</ul>
+            <li class="${it.skill ? 'sk' : ''}"><span>${it.ex ? `<button class="nm" data-ex="${it.ex}">${esc(it.n)}</button>` : `<span class="nm">${esc(it.n)}</span>`}${it.note ? `<span class="note">${esc(it.note)}</span>` : ''}</span><span class="rx">${esc(KX.bidi(it.rx))}</span></li>`).join('')}</ul>
             <button class="btn btn-accent btn-sm day-go" data-start-day="${di}">${icon('i-play')} התחל אימון מודרך</button></div>`).join('')}</div>
       <div class="plan-extra">
         <div class="vol"><h4>נפח שבועי (סטים)</h4>${Object.keys(VC).map((k) => `<div class="vbar" style="--c:${VC[k][1]}"><span>${VC[k][0]}</span><span class="tr"><span class="fill" data-w="${Math.min(100, (plan.volume[k] / 30) * 100)}"></span></span><b>${plan.volume[k]}</b></div>`).join('')}<small>האזור המודגש = 15–30 סטים לדפוס תנועה בשבוע, שהם בערך 10–20 סטים לשריר.</small></div>
@@ -546,7 +529,7 @@
     let t = `KALOS: תוכנית אימון אישית\n${plan.split} · מטרה: ${plan.goal} · ${inp.days} אימונים בשבוע\n\n`;
     plan.days.forEach((d) => {
       if (d.rest) { t += `יום ${d.day}: מנוחה\n\n`; return; }
-      t += `יום ${d.day}: ${d.name}\n` + d.items.map((it) => `  • ${it.n}: ${it.rx}${it.note ? ' (' + it.note + ')' : ''}`).join('\n') + '\n\n';
+      t += KX.t(`יום ${d.day}: ${d.name}`) + '\n' + d.items.map((it) => `  • ${KX.t(it.n)}: ${KX.t(it.rx)}${it.note ? ' (' + KX.t(it.note) + ')' : ''}`).join('\n') + '\n\n';
     });
     return t + plan.tips.map((x) => '- ' + x).join('\n');
   }
@@ -583,30 +566,86 @@
   $('#bento').innerHTML = KX.principles.map((p) => `<article class="bt reveal${p.wide ? ' wide' : ''}"><span class="big">${esc(p.big)}</span><span class="unit">${esc(p.unit)}</span><h3>${esc(p.h)}</h3><p>${esc(p.p)}</p></article>`).join('');
   $('#warmList').innerHTML = KX.warmup.map((w) => `<li><span>${esc(w.n)}</span><small>${esc(w.t)}</small></li>`).join('');
 
-  /* ---------- videos ---------- */
-  /* סרטונים מסומנים more:true מוצגים רק אחרי "הצג עוד" */
-  const vidCard = (id) => {
-    const v = KX.videos[id], ex = KX.exMap[id];
-    return `<article class="vid reveal">${facadeHTML(v)}<div class="vid-body"><p class="t">${esc(v.title)}</p><div class="meta"><span>${esc(v.ch)}</span><button data-ex="${id}">הדגמה: ${esc(ex.name)} ←</button></div></div></article>`;
+  /* ---------- סרטוני Kalo ---------- */
+  const KV_FIRST = 9;
+  let kvCat = 'all', kvAll = false;
+  const kvList = () => KX.exercises.filter((e) => kvCat === 'all' || e.cat === kvCat);
+  const kvDur = {};
+  const kvCard = (ex) => {
+    const d = kvDur[ex.id] || (kvDur[ex.id] = KX.kalo.fmt(KX.kalo.duration(ex)));
+    return `<button type="button" class="kv-card reveal in" data-kv="${ex.id}" style="--c:${catColor(ex.cat)}" aria-label="נגן סרטון Kalo: ${esc(ex.name)}, ${d}">
+      <span class="kv-poster"><svg data-poster="${ex.id}" aria-hidden="true"></svg><span class="kv-brand"><i>K</i>KALO</span><span class="kv-play">${icon('i-play')}</span><span class="kv-dur">${d}</span></span>
+      <span class="kv-body"><span class="kv-h">${esc(ex.name)}</span><span class="kv-meta"><span class="kv-cat">${esc(KX.cats[ex.cat].name)}</span> · ${esc(KX.levels[ex.level])} · <span dir="ltr">${esc(ex.en)}</span></span></span></button>`;
   };
-  const vidIds = Object.keys(KX.videos).filter((id) => KX.exMap[id]);
-  const vidMain = vidIds.filter((id) => !KX.videos[id].more), vidRest = vidIds.filter((id) => KX.videos[id].more);
-  $('#vidGrid').innerHTML = vidMain.map(vidCard).join('');
-  bindFacades($('#vidGrid'));
-  if (vidRest.length) {
+  /* תמונות השער נבנות רק כשהכרטיס מתקרב למסך */
+  const kvIO = 'IntersectionObserver' in window ? new IntersectionObserver((ents) => ents.forEach((en) => {
+    if (!en.isIntersecting) return;
+    kvIO.unobserve(en.target);
+    const ex = KX.exMap[en.target.dataset.poster];
+    if (ex) KX.kalo.poster(en.target, ex);
+  }), { rootMargin: '300px' }) : null;
+  function kvRender() {
+    const list = kvList(), show = kvAll ? list : list.slice(0, KV_FIRST);
+    $('#vidGrid').innerHTML = show.map(kvCard).join('');
+    $$('#vidGrid svg[data-poster]').forEach((s) => (kvIO ? kvIO.observe(s) : KX.kalo.poster(s, KX.exMap[s.dataset.poster])));
     const vm = $('#vidMore');
-    vm.hidden = false;
-    vm.textContent = `הצג עוד ${vidRest.length} סרטונים`;
-    vm.addEventListener('click', () => {
-      const tmp = document.createElement('div');
-      tmp.innerHTML = vidRest.map(vidCard).join('');
-      const nodes = Array.from(tmp.children);
-      nodes.forEach((n) => $('#vidGrid').appendChild(n));
-      nodes.forEach((n) => { bindFacades(n); n.classList.add('in'); });
-      vm.hidden = true;
-    }, { once: true });
+    vm.hidden = show.length >= list.length;
+    vm.textContent = `הצג את כל ${list.length} הסרטונים`;
   }
-  $('#vidGrid').addEventListener('click', (e) => { const b = e.target.closest('button[data-ex]'); if (b) openEx(b.dataset.ex); });
+  const kvCounts = KX.exercises.reduce((a, e) => ((a[e.cat] = (a[e.cat] || 0) + 1), a), {});
+  $('#vidChips').innerHTML = [['all', 'הכל', '#fff']].concat(Object.keys(KX.cats).filter((k) => kvCounts[k]).map((k) => [k, KX.cats[k].name, KX.cats[k].color]))
+    .map(([k, n, c]) => `<button class="chip" aria-pressed="${k === 'all'}" data-cat="${k}" style="--c:${c}"><i></i>${esc(n)} <b>${k === 'all' ? KX.exercises.length : kvCounts[k]}</b></button>`).join('');
+  $('#vidChips').addEventListener('click', (e) => {
+    const b = e.target.closest('.chip'); if (!b) return;
+    kvCat = b.dataset.cat; kvAll = false;
+    $$('#vidChips .chip').forEach((c) => c.setAttribute('aria-pressed', c === b));
+    kvRender();
+  });
+  $('#vidMore').addEventListener('click', () => { kvAll = true; kvRender(); });
+  kvRender();
+
+  const cinema = $('#cinema');
+  let cMovie = null, cEx = null, cPlay = null, cNextT = null;
+  /* opts.playlist: [{ ex, rx, note }] — רצועת Kalo של יום אימון; opts.cut: 'short' לגרסה מקוצרת */
+  function openCinema(id, opts) {
+    const ex = KX.exMap[id]; if (!ex) return;
+    clearTimeout(cNextT);
+    if (opts && opts.playlist) cPlay = { list: opts.playlist, idx: opts.idx || 0, title: opts.title || '', cut: opts.cut || null };
+    else if (!opts || !opts.keep) cPlay = null;
+    cEx = ex;
+    if (cMovie) cMovie.destroy();
+    const it = cPlay ? cPlay.list[cPlay.idx] : null;
+    $('#cnTitle').innerHTML = `${esc(ex.name)}<small dir="ltr">${esc(ex.en)}</small>${cPlay ? `<small class="cn-pl">${cPlay.idx + 1} מתוך ${cPlay.list.length} · ${esc(cPlay.title)}</small>` : ''}`;
+    if (!cinema.open) cinema.showModal();
+    cMovie = new KX.kalo.Movie($('#cnHost'), ex, {
+      autoplay: true, rx: it && it.rx, note: it && it.note, cut: cPlay && cPlay.cut,
+      onEnd: () => { if (cPlay && cPlay.idx < cPlay.list.length - 1) cNextT = setTimeout(() => cStep(1), 1100); },
+    });
+    const list = cPlay ? cPlay.list.map((x) => x.ex) : kvList().map((e) => e.id), i = cPlay ? cPlay.idx : list.indexOf(id);
+    $('#cnPrev').disabled = i <= 0;
+    $('#cnNext').disabled = i < 0 || i >= list.length - 1;
+    const cl = $('#cnList');
+    cl.hidden = !cPlay;
+    cl.innerHTML = cPlay ? cPlay.list.map((x, j) => `<button type="button" data-j="${j}" aria-current="${j === cPlay.idx}"><i>${j + 1}</i>${esc(KX.exMap[x.ex].name)}</button>`).join('') : '';
+    const on = $('[aria-current="true"]', cl); if (on && cl.scrollWidth > cl.clientWidth) cl.scrollTo({ left: on.offsetLeft - cl.clientWidth / 2 + on.offsetWidth / 2 });
+    cMovie.root.setAttribute('tabindex', '-1');
+    cMovie.root.focus({ preventScroll: true });
+  }
+  KX.openCinema = openCinema;
+  const cStep = (d) => {
+    if (cPlay) { const j = cPlay.idx + d; if (j < 0 || j >= cPlay.list.length) return; cPlay.idx = j; openCinema(cPlay.list[j].ex, { keep: true }); return; }
+    const list = kvList().map((e) => e.id); const n = list[list.indexOf(cEx.id) + d]; if (n) openCinema(n);
+  };
+  $('#cnList').addEventListener('click', (e) => { const b = e.target.closest('button[data-j]'); if (b && cPlay) { cPlay.idx = +b.dataset.j; openCinema(cPlay.list[cPlay.idx].ex, { keep: true }); } });
+  $('#cnPrev').addEventListener('click', () => cStep(-1));
+  $('#cnNext').addEventListener('click', () => cStep(1));
+  $('#cnEx').addEventListener('click', () => { const id = cEx.id; cinema.close(); openEx(id); });
+  $('#cnClose').addEventListener('click', () => cinema.close());
+  cinema.addEventListener('click', (e) => { if (e.target === cinema) cinema.close(); });
+  /* Esc במסך מלא מדומה — יוצא ממסך מלא בלבד */
+  cinema.addEventListener('cancel', (e) => { if (cMovie && cMovie.root.classList.contains('km-pseudo')) { e.preventDefault(); cMovie.toggleFs(); } });
+  cinema.addEventListener('close', () => { clearTimeout(cNextT); cPlay = null; if (cMovie) { cMovie.destroy(); cMovie = null; } });
+  $('#vidGrid').addEventListener('click', (e) => { const b = e.target.closest('[data-kv]'); if (b) openCinema(b.dataset.kv); });
 
   /* ---------- gallery + lightbox ---------- */
   const lb = $('#lightbox');
@@ -704,7 +743,7 @@
   /* ---------- API למודולים האחרים ---------- */
   KX.ui.reveal = (root) => observeReveal(root || document);
   KX.app = {
-    toast, openEx, bindFacades, facadeHTML, selectProgram,
+    toast, openEx, openCinema: (id, o) => KX.openCinema(id, o), selectProgram,
     currentEx: () => (modal.open ? mEx : null),
     closeEx: () => modal.open && modal.close(),
     getPlan: () => lastPlan,

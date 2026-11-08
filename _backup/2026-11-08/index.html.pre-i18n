@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>KALOS — קליסתניקס: המדריך המקצועי לאימון במשקל גוף</title>
+  <meta name="description" content="כל מה שצריך לדעת על קליסתניקס: מה זה, תרגילי יסוד עם הדגמות מונפשות, מסלולי התקדמות, תוכניות מוכחות ומחולל תוכנית אישית." />
+  <meta name="theme-color" content="#07090c" id="metaTheme" />
+  <script>/* ערכת נושא לפני הציור הראשון — בלי הבהוב */try{var kp=JSON.parse(localStorage.getItem('kalos.prefs')||'{}');document.documentElement.dataset.theme=kp.theme||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');}catch(e){document.documentElement.dataset.theme='dark';}</script>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="KALOS" />
+  <link rel="preload" href="assets/fonts/heebo-hebrew.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/rubik-hebrew.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/workout.css" />
+  <link rel="stylesheet" href="assets/css/me.css" />
+  <link rel="stylesheet" href="assets/css/skilltree.css" />
+  <link rel="stylesheet" href="assets/css/tools.css" />
+  <link rel="stylesheet" href="assets/css/kalo.css" />
+  <link rel="stylesheet" href="assets/css/parks.css" />
+  <link rel="stylesheet" href="assets/css/programs.css" />
+</head>
+<body>
+  <a class="skip" href="#main">דלג לתוכן</a>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <!-- ===== ניווט ===== -->
+  <header class="nav" id="nav">
+    <div class="wrap nav-in">
+      <a href="#top" class="logo" aria-label="KALOS — לראש העמוד">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32"><circle cx="16" cy="6" r="3.4"/><path d="M5 11h22M16 9.5v9M16 18.5l-5 9M16 18.5l5 9"/></svg>
+        </span>
+        <span class="logo-txt">KALOS<small>קליסתניקס</small></span>
+      </a>
+      <nav aria-label="ניווט ראשי">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#about">מה זה</a></li>
+          <li><a href="#exercises">תרגילים</a></li>
+          <li><a href="#progressions">התקדמות</a></li>
+          <li><a href="#skilltree">עץ סקילים</a></li>
+          <li><a href="#programs">תוכניות</a></li>
+          <li><a href="#workouts">אימונים</a></li>
+          <li><a href="#tools">כלים</a></li>
+          <li><a href="#parks">פארקים</a></li>
+          <li><a href="#videos">סרטונים</a></li>
+          <li><a href="#faq">שאלות</a></li>
+        </ul>
+      </nav>
+      <div class="nav-tools">
+        <button class="icon-btn nav-ib" id="themeToggle" aria-label="מצב בהיר" title="מצב בהיר / כהה"><svg class="ico i-sun"><use href="#i-sun"/></svg><svg class="ico i-moon"><use href="#i-moon"/></svg></button>
+        <a href="#me" class="nav-me" id="navMe" aria-label="האימון שלי"><svg class="ico"><use href="#i-user"/></svg><span class="nav-me-t">האימון שלי</span><b class="nav-streak" id="navStreak" hidden><svg class="ico"><use href="#i-fire"/></svg><span></span></b></a>
+      </div>
+      <a href="#builder" class="btn btn-sm btn-accent nav-cta">בנה לי תוכנית</a>
+      <button class="burger" id="burger" aria-label="פתח תפריט" aria-expanded="false" aria-controls="navLinks"><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="top">
+      <div class="hero-bg" aria-hidden="true"><img id="heroImg" alt="" fetchpriority="high" /></div>
+      <div class="hero-grain" aria-hidden="true"></div>
+      <div class="wrap hero-in">
+        <div class="hero-copy">
+          <p class="eyebrow reveal"><span class="dot"></span> המדריך המקצועי לקליסתניקס בעברית</p>
+          <h1 class="reveal">הגוף שלך<br />הוא <em>חדר הכושר.</em></h1>
+          <p class="lead reveal">מהשכיבת סמיכה הראשונה ועד עליית כוח ועמידת ידיים. תרגילים עם הדגמות חיות של ביצוע נכון ושגוי, מסלולי התקדמות מוכחים ותוכנית אימון שנבנית במיוחד בשבילך.</p>
+          <div class="hero-ctas reveal">
+            <a href="#builder" class="btn btn-accent btn-lg">בנה לי תוכנית <svg class="ico"><use href="#i-arrow"/></svg></a>
+            <a href="#exercises" class="btn btn-ghost btn-lg"><svg class="ico"><use href="#i-play"/></svg> לספריית התרגילים</a>
+          </div>
+          <dl class="hero-stats reveal">
+            <div><dt data-count="44" id="statEx">0</dt><dd>תרגילים עם הדגמה</dd></div>
+            <div><dt data-count="6">0</dt><dd>מסלולי התקדמות</dd></div>
+            <div><dt data-count="7">0</dt><dd>תוכניות מוכחות</dd></div>
+            <div><dt>₪0</dt><dd>ציוד נדרש להתחלה</dd></div>
+          </dl>
+        </div>
+        <aside class="hero-card glass reveal" aria-label="הדגמה חיה">
+          <div class="hc-head"><span class="live"><i></i> הדגמה חיה</span><span class="hc-name" id="heroDemoName">מתח</span></div>
+          <svg class="hc-stage" id="heroFig" role="img"></svg>
+          <p class="hc-cap" id="heroCap" aria-live="off"></p>
+          <div class="hc-switch" role="tablist" aria-label="בחר תרגיל להדגמה">
+            <button role="tab" aria-selected="true" data-hero="pullup">מתח</button>
+            <button role="tab" aria-selected="false" data-hero="muscleup">עליית כוח</button>
+            <button role="tab" aria-selected="false" data-hero="pushup">שכ״ס</button>
+            <button role="tab" aria-selected="false" data-hero="pistol">פיסטול</button>
+          </div>
+        </aside>
+      </div>
+      <a href="#about" class="scroll-cue" aria-label="גלול למטה"><span></span></a>
+    </section>
+
+    <!-- ===== מרקיז ===== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>PULL-UP</span><i>✦</i><span>PUSH-UP</span><i>✦</i><span>DIPS</span><i>✦</i><span>PISTOL SQUAT</span><i>✦</i><span>HANDSTAND</span><i>✦</i><span>MUSCLE-UP</span><i>✦</i><span>FRONT LEVER</span><i>✦</i><span>L-SIT</span><i>✦</i>
+        <span>PULL-UP</span><i>✦</i><span>PUSH-UP</span><i>✦</i><span>DIPS</span><i>✦</i><span>PISTOL SQUAT</span><i>✦</i><span>HANDSTAND</span><i>✦</i><span>MUSCLE-UP</span><i>✦</i><span>FRONT LEVER</span><i>✦</i><span>L-SIT</span><i>✦</i>
+      </div>
+    </div>
+
+    <!-- ===== מה זה ===== -->
+    <section class="section" id="about">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">01</span>
+          <p class="eyebrow">מה זה קליסתניקס?</p>
+          <h2>יופי + כוח.<br />בלי משקולות.</h2>
+        </header>
+
+        <div class="about-grid">
+          <div class="about-copy reveal">
+            <p class="big">קליסתניקס הוא אימון כוח שמשתמש <strong>במשקל הגוף כהתנגדות</strong>. משיכה, דחיפה, סקוואט, החזקות סטטיות ותנועות דינמיות, על הרצפה, על מוט ועל מקבילים.</p>
+            <p>במקום להוסיף ק״ג למוט, מעלים את הקושי <strong>בשינוי המנוף</strong>: זווית הגוף, עבודה על יד או רגל אחת, טמפו, טווח תנועה והחזקות. כך אפשר להתקדם משכיבת סמיכה על קיר ועד שכיבת סמיכה ביד אחת, ומתלייה על מוט ועד פרונט לבר.</p>
+            <div class="etym">
+              <div><b lang="el">κάλλος</b><span>קאלוס · יופי</span></div>
+              <span class="plus">+</span>
+              <div><b lang="el">σθένος</b><span>סתנוס · כוח</span></div>
+            </div>
+          </div>
+          <div class="collage reveal" aria-hidden="true">
+            <figure class="c1"><img data-img="pullOut" data-w="900" alt="" loading="lazy" /></figure>
+            <figure class="c2"><img data-img="hsRail" data-w="700" alt="" loading="lazy" /></figure>
+            <figure class="c3"><img data-img="group" data-w="700" alt="" loading="lazy" /></figure>
+            <div class="c-badge glass"><b>4</b><span>דפוסי תנועה<br />+ סקילים</span></div>
+          </div>
+        </div>
+
+        <!-- יתרונות -->
+        <div class="benefits">
+          <article class="bcard reveal"><svg class="bico"><use href="#i-bolt"/></svg><h3>כוח יחסי</h3><p>כוח ביחס למשקל הגוף: שליטה, יציבות וכוח שעובר לכל תחום בחיים.</p></article>
+          <article class="bcard reveal"><svg class="bico"><use href="#i-pin"/></svg><h3>בכל מקום, בחינם</h3><p>פארק, סלון או חדר מלון. מספיקים מוט ורצפה.</p></article>
+          <article class="bcard reveal"><svg class="bico"><use href="#i-flex"/></svg><h3>מוביליות ובריאות מפרקים</h3><p>טווחי תנועה מלאים ותנועה פונקציונלית, כוח וגמישות באותו אימון.</p></article>
+          <article class="bcard reveal"><svg class="bico"><use href="#i-star"/></svg><h3>סקילים שמניעים</h3><p>עמידת ידיים, עליית כוח, לבר. מטרות מוחשיות ששומרות על מוטיבציה לשנים.</p></article>
+        </div>
+
+        <!-- ציר זמן -->
+        <div class="timeline-wrap reveal">
+          <div class="tl-head">
+            <h3>היסטוריה קצרה</h3>
+            <div class="tl-ctrl"><button class="icon-btn" data-tl="1" aria-label="הקודם"><svg class="ico"><use href="#i-chev-r"/></svg></button><button class="icon-btn" data-tl="-1" aria-label="הבא"><svg class="ico"><use href="#i-chev-l"/></svg></button></div>
+          </div>
+          <ol class="timeline" id="timeline"></ol>
+        </div>
+
+        <!-- השוואה -->
+        <div class="compare reveal">
+          <h3>קליסתניקס מול חדר כושר</h3>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th scope="col"></th><th scope="col"><span class="tag tag-accent">קליסתניקס</span></th><th scope="col"><span class="tag">חדר כושר</span></th></tr></thead>
+              <tbody id="compareBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== תרגילים ===== -->
+    <section class="section section-alt" id="exercises">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">02</span>
+          <p class="eyebrow">ספריית התרגילים</p>
+          <h2><span class="ex-total">44</span> תרגילים.<br />הדגמה חיה לכל אחד.</h2>
+          <p class="sec-sub">חזה, גב, כתפיים, ידיים, בטן, רגליים וגוף מלא. בחרו אזור בגוף או דפוס תנועה, ולחצו על תרגיל כדי לראות הדגמה מונפשת של <b class="ok">ביצוע נכון</b> מול <b class="no">טעות נפוצה</b>, שלבי ביצוע, דגשים, התקדמות וסרטון.</p>
+        </header>
+
+        <div class="body-filter reveal" role="toolbar" aria-label="סינון לפי אזור בגוף">
+          <span class="bf-label">אזור בגוף</span>
+          <div class="chips" id="groupChips"></div>
+        </div>
+        <div class="filters reveal" role="toolbar" aria-label="סינון תרגילים">
+          <div class="chips" id="catChips"></div>
+          <div class="filter-side">
+            <div class="seg" id="levelSeg" role="radiogroup" aria-label="רמה">
+              <button role="radio" aria-checked="true" data-level="0">כל הרמות</button>
+              <button role="radio" aria-checked="false" data-level="1">מתחיל</button>
+              <button role="radio" aria-checked="false" data-level="2">בינוני</button>
+              <button role="radio" aria-checked="false" data-level="3">מתקדם</button>
+            </div>
+            <button class="chip chip-fav" id="favOnly" aria-pressed="false"><svg class="ico"><use href="#i-star"/></svg> מועדפים <b id="favCount">0</b></button>
+            <label class="search"><svg class="ico"><use href="#i-search"/></svg><input type="search" id="exSearch" placeholder="חיפוש תרגיל…" aria-label="חיפוש תרגיל" /></label>
+          </div>
+        </div>
+        <div class="ex-grid" id="exGrid"></div>
+        <p class="empty" id="exEmpty" hidden>לא נמצאו תרגילים. נסו סינון אחר.</p>
+      </div>
+    </section>
+
+    <!-- ===== מסלולי התקדמות ===== -->
+    <section class="section" id="progressions">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">03</span>
+          <p class="eyebrow">מסלולי התקדמות</p>
+          <h2>כל מסע מתחיל<br />בצעד שאתה כבר יכול לעשות.</h2>
+          <p class="sec-sub">בחרו מסלול. עברו לשלב הבא רק כשאתם עומדים <b>ביעד</b> של השלב הנוכחי בטכניקה מושלמת.</p>
+        </header>
+        <div class="prog-tabs reveal" id="progTabs" role="tablist" aria-label="מסלולי התקדמות"></div>
+        <div class="prog-panel reveal" id="progPanel" role="tabpanel"></div>
+      </div>
+    </section>
+
+    <!-- ===== עץ סקילים ===== -->
+    <section class="section section-alt" id="skilltree">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">04</span>
+          <p class="eyebrow">עץ הסקילים שלך</p>
+          <h2>סמנו מה כבר השגתם.<br />ראו מה הצעד הבא.</h2>
+          <p class="sec-sub">כל ענף הוא מסלול התקדמות. לחצו על שלב כדי לראות את היעד ולסמן שהשגתם אותו. ההתקדמות נשמרת בדפדפן ומופיעה גם במסלולי ההתקדמות.</p>
+        </header>
+        <div id="skillTreeMount"></div>
+      </div>
+    </section>
+
+    <!-- ===== תוכניות ===== -->
+    <section class="section" id="programs">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">05</span>
+          <p class="eyebrow">תוכניות אימון מוכחות</p>
+          <h2>התוכניות שהקהילה<br />בדקה במשך שנים.</h2>
+          <p class="sec-sub">לכל תוכנית יש 3 שלבים, מהמתחיל ועד המתקדם, עם תרגילים מהספרייה ותנאי ברור למעבר שלב. ברצועת Kalo רואים כל תרגיל ביום האימון ואפשר להחליף אותו בתרגיל דומה. לצד כל תוכנית מופיע מה ממליצים המקורות והמחקרים.</p>
+        </header>
+        <div class="programs">
+          <div class="prog-list reveal" id="progList" role="tablist" aria-label="תוכניות"></div>
+          <article class="prog-detail reveal" id="progDetail" role="tabpanel" aria-live="polite"></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== מחולל תוכנית ===== -->
+    <section class="section builder-sec" id="builder">
+      <div class="builder-bg" aria-hidden="true"><img data-img="graffiti" data-w="1800" alt="" loading="lazy" /></div>
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">06</span>
+          <p class="eyebrow">מחולל תוכנית אישית</p>
+          <h2>4 שאלות.<br />תוכנית שבועית מלאה.</h2>
+          <p class="sec-sub">התוכנית נבנית לפי העקרונות המקצועיים שבאתר: נפח, תדירות, התקדמות לפי מנוף, והתרגיל המתאים לרמה שלך בכל דפוס תנועה.</p>
+          <button type="button" class="btn btn-ghost btn-sm test-cta" data-open-test><svg class="ico"><use href="#i-test"/></svg> לא בטוחים ברמה? מבחן כושר של 10 דקות</button>
+        </header>
+
+        <form class="wizard glass reveal" id="wizard" novalidate>
+          <ol class="wz-steps" aria-label="שלבים">
+            <li class="on" data-step="0"><span>1</span>מטרה</li>
+            <li data-step="1"><span>2</span>רמה</li>
+            <li data-step="2"><span>3</span>זמן</li>
+            <li data-step="3"><span>4</span>ציוד</li>
+          </ol>
+
+          <fieldset class="wz-pane on" data-pane="0">
+            <legend>מה המטרה העיקרית שלך?</legend>
+            <div class="opt-grid">
+              <label class="opt"><input type="radio" name="goal" value="strength" checked /><span><svg class="ico"><use href="#i-bolt"/></svg><b>כוח</b><small>להיות חזק יותר: יותר חזרות, תרגילים קשים יותר</small></span></label>
+              <label class="opt"><input type="radio" name="goal" value="muscle" /><span><svg class="ico"><use href="#i-flex"/></svg><b>מסת שריר</b><small>נפח גבוה יותר, 8–15 חזרות קרוב לכשל</small></span></label>
+              <label class="opt"><input type="radio" name="goal" value="skills" /><span><svg class="ico"><use href="#i-star"/></svg><b>סקילים</b><small>עמידת ידיים, L־sit, לבר ועליית כוח</small></span></label>
+              <label class="opt"><input type="radio" name="goal" value="endurance" /><span><svg class="ico"><use href="#i-heart"/></svg><b>סיבולת וחיטוב</b><small>מעגלים, מנוחות קצרות, כושר כללי</small></span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="wz-pane" data-pane="1">
+            <legend>כמה חזרות נקיות אתה מצליח לעשות ברצף?</legend>
+            <div class="sliders">
+              <div class="sl"><label for="sPush">שכיבות סמיכה</label><output id="oPush">10</output><input type="range" id="sPush" min="0" max="50" value="10" /><small id="lPush"></small></div>
+              <div class="sl"><label for="sPull">מתח</label><output id="oPull">2</output><input type="range" id="sPull" min="0" max="20" value="2" /><small id="lPull"></small></div>
+              <div class="sl"><label for="sDip">מקבילים (דיפס)</label><output id="oDip">3</output><input type="range" id="sDip" min="0" max="25" value="3" /><small id="lDip"></small></div>
+              <div class="sl"><label for="sSquat">סקוואט</label><output id="oSquat">20</output><input type="range" id="sSquat" min="0" max="100" step="5" value="20" /><small id="lSquat"></small></div>
+            </div>
+            <p class="hint">לא בטוח? עשה סט אחד לכל תרגיל עכשיו. אין לחץ, התוכנית תתאים את עצמה.</p>
+          </fieldset>
+
+          <fieldset class="wz-pane" data-pane="2">
+            <legend>כמה זמן יש לך?</legend>
+            <p class="lbl">אימונים בשבוע</p>
+            <div class="pills" role="radiogroup" aria-label="אימונים בשבוע">
+              <label><input type="radio" name="days" value="2" /><span>2</span></label>
+              <label><input type="radio" name="days" value="3" checked /><span>3</span></label>
+              <label><input type="radio" name="days" value="4" /><span>4</span></label>
+              <label><input type="radio" name="days" value="5" /><span>5</span></label>
+              <label><input type="radio" name="days" value="6" /><span>6</span></label>
+            </div>
+            <p class="lbl">משך אימון</p>
+            <div class="pills" role="radiogroup" aria-label="משך אימון">
+              <label><input type="radio" name="time" value="30" /><span>30 דק׳</span></label>
+              <label><input type="radio" name="time" value="45" /><span>45 דק׳</span></label>
+              <label><input type="radio" name="time" value="60" checked /><span>60 דק׳</span></label>
+              <label><input type="radio" name="time" value="75" /><span>75+ דק׳</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="wz-pane" data-pane="3">
+            <legend>איזה ציוד זמין לך?</legend>
+            <div class="opt-grid opt-grid-4">
+              <label class="opt"><input type="checkbox" name="eq" value="floor" checked disabled /><span><svg class="ico"><use href="#i-home"/></svg><b>רצפה</b><small>תמיד זמין</small></span></label>
+              <label class="opt"><input type="checkbox" name="eq" value="bar" checked /><span><svg class="ico"><use href="#i-bar"/></svg><b>מוט מתח</b><small>בדלת או בפארק</small></span></label>
+              <label class="opt"><input type="checkbox" name="eq" value="dip" checked /><span><svg class="ico"><use href="#i-dip"/></svg><b>מקבילים</b><small>או שני כיסאות יציבים</small></span></label>
+              <label class="opt"><input type="checkbox" name="eq" value="rings" /><span><svg class="ico"><use href="#i-rings"/></svg><b>טבעות</b><small>מחליפות מוט ומקבילים</small></span></label>
+            </div>
+          </fieldset>
+
+          <div class="wz-nav">
+            <button type="button" class="btn btn-ghost" id="wzBack" disabled>חזרה</button>
+            <div class="wz-dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+            <button type="button" class="btn btn-accent" id="wzNext">המשך <svg class="ico"><use href="#i-arrow"/></svg></button>
+          </div>
+        </form>
+
+        <div class="plan" id="plan" hidden tabindex="-1"></div>
+      </div>
+    </section>
+
+    <!-- ===== אימונים מודרכים + אתגרים ===== -->
+    <section class="section section-alt" id="workouts">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">07</span>
+          <p class="eyebrow">אימונים מודרכים ואתגרים</p>
+          <h2>לחצו "התחל".<br />אנחנו נספור בשבילכם.</h2>
+          <p class="sec-sub">מצב אימון מודרך: הדגמה חיה לכל תרגיל, ספירת סטים, שעון מנוחה אוטומטי והנחיות קוליות. בסוף האימון הכל נשמר ביומן שלכם.</p>
+        </header>
+        <div id="workoutsMount"></div>
+        <div id="challengesMount"></div>
+      </div>
+    </section>
+
+    <!-- ===== האימון שלי ===== -->
+    <section class="section" id="me">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">08</span>
+          <p class="eyebrow">האימון שלי</p>
+          <h2>כל חזרה נספרת.<br />כאן רואים אותה.</h2>
+          <p class="sec-sub">יומן אימונים, רצפים, לוח חודשי, גרפים של התקדמות והישגים. הנתונים נשמרים רק בדפדפן שלכם, ואפשר לגבות ולשחזר אותם בקובץ.</p>
+        </header>
+        <div id="meMount"></div>
+      </div>
+    </section>
+
+    <!-- ===== כלים ===== -->
+    <section class="section section-alt" id="tools">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">09</span>
+          <p class="eyebrow">כלים</p>
+          <h2>טיימר אינטרוולים<br />ומחשבונים.</h2>
+          <p class="sec-sub">טיימר ל־Tabata, EMOM ו־AMRAP עם הנחיות קוליות, מחשבון כוח יחסי ומחשבון חלבון וקלוריות.</p>
+        </header>
+        <div id="toolsMount"></div>
+      </div>
+    </section>
+
+    <!-- ===== עקרונות ===== -->
+    <section class="section" id="principles">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">10</span>
+          <p class="eyebrow">עקרונות בניית תוכנית</p>
+          <h2>המדע שמאחורי<br />ההתקדמות.</h2>
+        </header>
+        <div class="bento" id="bento"></div>
+
+        <div class="warm reveal">
+          <div class="warm-copy">
+            <p class="eyebrow">לפני כל אימון</p>
+            <h3>חימום של 8–10 דקות</h3>
+            <p>מפרקי ידיים, כתפיים ושכמות הם החוליה החלשה בקליסתניקס. החימום הזה מכין בדיוק אותם.</p>
+            <button class="btn btn-ghost" id="warmStart"><svg class="ico"><use href="#i-timer"/></svg> הפעל טיימר חימום</button>
+          </div>
+          <ol class="warm-list" id="warmList"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== וידאו ===== -->
+    <section class="section section-alt" id="videos">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">11</span>
+          <p class="eyebrow">סרטוני Kalo</p>
+          <h2>Kalo מדגים.<br />אתם מתקדמים.</h2>
+          <p class="sec-sub">לכל אחד מהתרגילים יש סרטון קצר בכיכובו של Kalo: <b class="ok">הביצוע הנכון</b>, השרירים שעובדים מסומנים על הגוף, צעד אחר צעד בהילוך איטי, ו<b class="no">הטעויות הנפוצות</b> ואיך לתקן אותן. בלי פרסומות, ועובד גם בלי אינטרנט.</p>
+        </header>
+        <div class="chips kv-filters reveal" id="vidChips" role="group" aria-label="סינון לפי קטגוריה"></div>
+        <div class="kv-grid" id="vidGrid"></div>
+        <div class="vid-more"><button class="btn btn-ghost" id="vidMore" hidden>הצג עוד סרטונים</button></div>
+      </div>
+    </section>
+
+    <!-- ===== גלריה ===== -->
+    <!-- ===== מצא פארק ===== -->
+    <section class="section" id="parks">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">12</span>
+          <p class="eyebrow">מצא פארק</p>
+          <h2>מתקן כושר<br />קרוב אליכם.</h2>
+          <p class="sec-sub">מוטות מתח, מקבילים, פינות כושר ומגרשים ציבוריים סביבכם, לפי המפה הפתוחה OpenStreetMap. בחרו מקום, ראו אילו תרגילים אפשר לעשות בו, וצאו לדרך עם Waze או Google Maps.</p>
+        </header>
+        <div class="pk-panel reveal">
+          <div class="pk-controls">
+            <button type="button" class="btn btn-accent" id="pkLocate"><svg class="ico"><use href="#i-pin"/></svg> מצא לידי</button>
+            <form class="pk-form" id="pkForm" role="search">
+              <label class="sr-only" for="pkQ">חיפוש לפי עיר או כתובת</label>
+              <input id="pkQ" type="search" enterkeyhint="search" autocomplete="off" placeholder="או חפשו עיר / שכונה / כתובת" />
+              <button type="submit" class="btn btn-ghost btn-sm">חפש</button>
+            </form>
+            <div class="pk-radius" id="pkRadius" role="group" aria-label="רדיוס חיפוש">
+              <button type="button" data-r="1000" aria-pressed="false">1 ק״מ</button>
+              <button type="button" data-r="2000" aria-pressed="true">2 ק״מ</button>
+              <button type="button" data-r="5000" aria-pressed="false">5 ק״מ</button>
+              <button type="button" data-r="10000" aria-pressed="false">10 ק״מ</button>
+            </div>
+          </div>
+          <p class="pk-status" id="pkStatus" role="status" aria-live="polite"></p>
+          <div class="chips pk-filters" id="pkFilters" role="group" aria-label="סינון לפי סוג" hidden></div>
+          <div class="pk-body">
+            <ol class="pk-list" id="pkList"></ol>
+            <div class="pk-side">
+              <div class="pk-radar" hidden><svg id="pkRadar" viewBox="0 0 200 200" role="img" aria-label="המקומות סביבכם לפי כיוון ומרחק"></svg></div>
+              <div class="pk-map" id="pkMap"></div>
+            </div>
+          </div>
+          <div class="pk-saved" id="pkSaved" hidden>
+            <h3>הפארקים שלי</h3>
+            <ul id="pkSavedList"></ul>
+          </div>
+          <p class="pk-note">נתוני מפה © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>. המיקום נשלח רק לשרתי החיפוש של OpenStreetMap ברגע החיפוש, ולא נשמר. חסר מתקן ליד הבית? <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">הוסיפו אותו למפה</a> ויופיע כאן לכולם.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="gallery">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">13</span>
+          <p class="eyebrow">השראה</p>
+          <h2>איך זה נראה<br />בעולם האמיתי.</h2>
+        </header>
+        <div class="masonry" id="masonry"></div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="section section-alt" id="faq">
+      <div class="wrap faq-wrap">
+        <header class="sec-head reveal">
+          <span class="sec-num">14</span>
+          <p class="eyebrow">שאלות נפוצות</p>
+          <h2>כל מה ששאלתם<br />(ועוד קצת).</h2>
+        </header>
+        <div class="faq" id="faqList"></div>
+      </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="cta">
+      <div class="cta-bg" aria-hidden="true"><img data-img="hsBars" data-w="1800" alt="" loading="lazy" /></div>
+      <div class="wrap cta-in reveal">
+        <h2>האימון הבא שלך מתחיל<br /><em>עכשיו.</em></h2>
+        <a href="#builder" class="btn btn-accent btn-lg">בנה לי תוכנית בחינם <svg class="ico"><use href="#i-arrow"/></svg></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap foot-in">
+      <div>
+        <a href="#top" class="logo"><span class="logo-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="6" r="3.4"/><path d="M5 11h22M16 9.5v9M16 18.5l-5 9M16 18.5l5 9"/></svg></span><span class="logo-txt">KALOS<small>קליסתניקס</small></span></a>
+        <p class="muted">המדריך המקצועי לאימון במשקל גוף.</p>
+      </div>
+      <div>
+        <h4>מקורות</h4>
+        <ul class="muted">
+          <li>r/bodyweightfitness: Recommended Routine</li>
+          <li>Paul Wade: Convict Conditioning (2009)</li>
+          <li>Steven Low: Overcoming Gravity (2nd ed.)</li>
+          <li>Schoenfeld et al., 2017: J Sports Sci (נפח אימון)</li>
+          <li>Morton et al., 2018: Br J Sports Med (חלבון)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>קרדיטים</h4>
+        <ul class="muted">
+          <li>תמונות: <a href="https://www.pexels.com/search/calisthenics/" target="_blank" rel="noopener">Pexels</a> (רישיון חופשי)</li>
+          <li>סרטונים: באדיבות הערוצים ב-YouTube</li>
+          <li>הדגמות מונפשות: KALOS</li>
+        </ul>
+      </div>
+    </div>
+    <div class="wrap disclaimer">המידע באתר הוא כללי ואינו תחליף לייעוץ רפואי או מקצועי. התייעצו עם רופא לפני תחילת תוכנית אימון, ועצרו בכל כאב חד.</div>
+  </footer>
+
+  <!-- ===== מודאל תרגיל ===== -->
+  <dialog class="modal" id="exModal" aria-labelledby="mTitle">
+    <div class="m-shell">
+      <button class="icon-btn m-close" id="mClose" aria-label="סגור"><svg class="ico"><use href="#i-x"/></svg></button>
+      <div class="m-stage">
+        <div class="m-mode" role="radiogroup" aria-label="מצב הדגמה">
+          <button role="radio" aria-checked="true" data-mode="good" class="good"><svg class="ico"><use href="#i-check"/></svg> ביצוע נכון</button>
+          <button role="radio" aria-checked="false" data-mode="bad" class="bad"><svg class="ico"><use href="#i-x"/></svg> טעות נפוצה</button>
+        </div>
+        <svg class="m-fig" id="mFig" role="img"></svg>
+        <p class="m-cap" id="mCap" aria-live="polite"></p>
+        <div class="m-ctrl">
+          <button class="icon-btn" id="mPlay" aria-label="השהה"><svg class="ico"><use href="#i-pause"/></svg></button>
+          <div class="m-dots" id="mDots"></div>
+          <div class="seg seg-sm" id="mSpeed" role="radiogroup" aria-label="מהירות">
+            <button role="radio" aria-checked="false" data-speed="0.5" dir="ltr">0.5×</button>
+            <button role="radio" aria-checked="true" data-speed="1" dir="ltr">1×</button>
+          </div>
+        </div>
+      </div>
+      <div class="m-body">
+        <div class="m-top">
+          <div class="m-tags" id="mTags"></div>
+          <h3 id="mTitle"></h3>
+          <p class="m-en" id="mEn"></p>
+          <p class="m-sum" id="mSum"></p>
+          <dl class="m-meta" id="mMeta"></dl>
+        </div>
+        <div class="tabs" role="tablist" aria-label="מידע על התרגיל" id="mTabs">
+          <button role="tab" aria-selected="true" data-tab="steps">ביצוע</button>
+          <button role="tab" aria-selected="false" data-tab="cues">דגשים</button>
+          <button role="tab" aria-selected="false" data-tab="mistakes">טעויות</button>
+          <button role="tab" aria-selected="false" data-tab="prog">התקדמות</button>
+          <button role="tab" aria-selected="false" data-tab="video">סרטון Kalo</button>
+        </div>
+        <div class="m-pane" id="mPane" role="tabpanel"></div>
+        <div class="m-foot">
+          <button class="btn btn-ghost btn-sm" id="mPrev"><svg class="ico"><use href="#i-chev-r"/></svg> הקודם</button>
+          <button class="btn btn-ghost btn-sm" id="mNext">הבא <svg class="ico"><use href="#i-chev-l"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ===== קולנוע: סרטון Kalo ===== -->
+  <dialog class="cinema" id="cinema" aria-labelledby="cnTitle">
+    <div class="cn-head">
+      <h3 id="cnTitle"></h3>
+      <button class="icon-btn" id="cnClose" aria-label="סגור"><svg class="ico"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="cn-host" id="cnHost"></div>
+    <div class="cn-list" id="cnList" role="group" aria-label="רצועת Kalo" hidden></div>
+    <div class="cn-foot">
+      <button class="btn btn-ghost btn-sm" id="cnEx">כרטיס התרגיל המלא</button>
+      <span>
+        <button class="btn btn-ghost btn-sm" id="cnPrev"><svg class="ico"><use href="#i-chev-r"/></svg> הקודם</button>
+        <button class="btn btn-ghost btn-sm" id="cnNext">הבא <svg class="ico"><use href="#i-chev-l"/></svg></button>
+      </span>
+    </div>
+  </dialog>
+
+  <!-- ===== לייטבוקס ===== -->
+  <dialog class="lightbox" id="lightbox" aria-label="תמונה מוגדלת">
+    <button class="icon-btn lb-close" aria-label="סגור"><svg class="ico"><use href="#i-x"/></svg></button>
+    <img id="lbImg" alt="" />
+    <p id="lbCap"></p>
+  </dialog>
+
+  <!-- ===== טיימר מנוחה ===== -->
+  <div class="timer" id="timer">
+    <button class="timer-fab" id="timerFab" aria-expanded="false" aria-controls="timerPanel" aria-label="שעון מנוחה"><svg class="ico"><use href="#i-timer"/></svg></button>
+    <div class="timer-panel glass" id="timerPanel" hidden>
+      <p class="tp-title" id="tpTitle">שעון מנוחה</p>
+      <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="r-bg"/><circle cx="60" cy="60" r="52" class="r-fg" id="ringFg"/></svg><b id="tpTime">1:30</b></div>
+      <p class="tp-sub" id="tpSub"></p>
+      <div class="tp-presets" id="tpPresets"><button data-sec="60">60״</button><button data-sec="90" class="on">90״</button><button data-sec="120">2׳</button><button data-sec="180">3׳</button></div>
+      <div class="tp-actions"><button class="btn btn-accent btn-sm" id="tpGo">התחל</button><button class="btn btn-ghost btn-sm" id="tpReset">איפוס</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- ===== אייקונים ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
+      <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+      <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+      <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+      <symbol id="i-flex" viewBox="0 0 24 24"><path d="M4 15c3-1 5-4 6-8l3 1-1 4c3-1 6 1 7 4-2 4-8 5-15 3z"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5 10v10h14V10"/></symbol>
+      <symbol id="i-bar" viewBox="0 0 24 24"><path d="M3 5h18M6 5v16M18 5v16M9 5v4a3 3 0 0 0 6 0V5"/></symbol>
+      <symbol id="i-dip" viewBox="0 0 24 24"><path d="M2 10h7M15 10h7M5 10v11M19 10v11M12 3v9m-3 9 3-9 3 9"/></symbol>
+      <symbol id="i-rings" viewBox="0 0 24 24"><path d="M7 2v10M17 2v10"/><circle cx="7" cy="16" r="4"/><circle cx="17" cy="16" r="4"/></symbol>
+      <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></symbol>
+      <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></symbol>
+      <symbol id="i-save" viewBox="0 0 24 24"><path d="M6 3h10l4 4v14H4V3zM8 3v6h8M8 21v-7h8v7"/></symbol>
+      <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></symbol>
+      <symbol id="i-yt" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4" fill="currentColor" stroke="none"/><path d="M10 9v6l5-3z" fill="#000" stroke="none"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+      <symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 22c4 0 7-2.7 7-6.8 0-3.6-2.4-6.1-4.3-8.2-.3 2-1.3 3.3-2.7 3.9.3-3.3-1-6.4-3.5-8.9C8.3 5.5 5 8.9 5 15.2 5 19.3 8 22 12 22z"/></symbol>
+      <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4v1a4 4 0 0 0 4 4M16 6h4v1a4 4 0 0 1-4 4M12 13v4M8 21h8M9 17h6v4H9z"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></symbol>
+      <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></symbol>
+      <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+      <symbol id="i-skip" viewBox="0 0 24 24"><path d="M7 5v14M9 12l10-7v14z"/></symbol>
+      <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
+      <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM17 9l5 6M22 9l-5 6"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 21h16"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 21V9m-5 5 5-5 5 5M4 3h16"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/></symbol>
+      <symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15v3M8 18h.01M12 18h.01"/></symbol>
+      <symbol id="i-tree" viewBox="0 0 24 24"><circle cx="12" cy="4" r="2"/><circle cx="5" cy="13" r="2"/><circle cx="19" cy="13" r="2"/><circle cx="12" cy="20" r="2"/><path d="M12 6v12M11 5.5 6 11.5M13 5.5l5 6"/></symbol>
+      <symbol id="i-test" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3M7 15h10"/></symbol>
+      <symbol id="i-star-f" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z" fill="currentColor"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.9-3M4 13a8 8 0 0 0 14.9 3M4 4v4h4M20 20v-4h-4"/></symbol>
+      <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+      <symbol id="i-wa" viewBox="0 0 24 24"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9c0 3 3 6 6 6l1-1.5-2-1-1 1c-1-.5-2-1.5-2.5-2.5l1-1-1-2z" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></symbol>
+    </defs>
+  </svg>
+
+  <script src="assets/js/figure.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/exercises-extra.js"></script>
+  <script src="assets/js/exercises-more.js"></script>
+  <script src="assets/js/kalo.js"></script>
+  <script src="assets/js/builder.js"></script>
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/features-data.js"></script>
+  <script src="assets/js/theme.js"></script>
+  <script src="assets/js/skilltree.js"></script>
+  <script src="assets/js/assess.js"></script>
+  <script src="assets/js/tools.js"></script>
+  <script src="assets/js/workout.js"></script>
+  <script src="assets/js/programs-plan.js"></script>
+  <script src="assets/js/tracker.js"></script>
+  <script src="assets/js/share.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/parks.js"></script>
+  <script src="assets/js/pwa.js"></script>
+</body>
+</html>

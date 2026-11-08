@@ -12,7 +12,7 @@
   --line2: rgba(var(--fg), 0.14);
   --text: #eef2f6;
   --muted: #95a1ae;
-  --muted2: #6b7783;
+  --muted2: #848f9b;
   --accent: #c8ff3d;
   --accent-ink: #0b1000;
   --accent-soft: rgba(200, 255, 61, 0.12);
@@ -534,7 +534,7 @@ input[type='range']:focus-visible { outline: 2px solid var(--accent); outline-of
 .footer { border-top: 1px solid var(--line); padding: 70px 0 30px; background: var(--bg2); }
 .foot-in { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 40px; }
 .foot-in p { margin-top: 14px; }
-.footer h4 { font-size: 1rem; margin-bottom: 14px; }
+.footer h4, .footer h3 { font-size: 1rem; margin-bottom: 14px; }
 .footer li { font-size: 0.9rem; margin-bottom: 6px; }
 .footer a:hover { color: var(--accent-text); }
 .disclaimer { margin-top: 50px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted2); font-size: 0.84rem; }
@@ -721,7 +721,7 @@ input[type='range']:focus-visible { outline: 2px solid var(--accent); outline-of
   --text: #12161c;
   --text2: #39424d;
   --muted: #59636e;
-  --muted2: #737d88;
+  --muted2: #5d6772;
   --hi: #12161c;
   --hi-ink: #ffffff;
   --accent: #c8ff3d;               /* filled buttons/chips keep the brand lime */
@@ -731,8 +731,8 @@ input[type='range']:focus-visible { outline: 2px solid var(--accent); outline-of
   --accent-text: #4a6e00;          /* 5.9:1 on white */
   --cyan: #0a8fb0;
   --cyan-text: #087a96;
-  --danger: #d4303f;
-  --ok: #0f9a62;
+  --danger: #b8202f;
+  --ok: #0a7448;
   --sk-text: #5a3fd0;
   --sk-text2: #6a50db;
   --nav-bg: rgba(245, 244, 239, 0.82);
@@ -749,8 +749,8 @@ input[type='range']:focus-visible { outline: 2px solid var(--accent); outline-of
 [data-theme='light'] .ex-card:hover { box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--c) 60%, rgba(0, 0, 0, 0.3)); }
 /* category colours used as text on light surfaces → darkened */
 [data-theme='light'] .ex-foot .go, [data-theme='light'] .pp-head h3 span, [data-theme='light'] .ptab[aria-selected='true'] small,
-[data-theme='light'] .rung .demo, [data-theme='light'] .pp-rule .ico { color: color-mix(in srgb, var(--c) 58%, black); }
-[data-theme='light'] .m-tags .tag[style] { filter: brightness(0.55) saturate(1.6); }
+[data-theme='light'] .rung .demo, [data-theme='light'] .pp-rule .ico { color: color-mix(in srgb, var(--c) 40%, black); }
+[data-theme='light'] .m-tags .tag[style] { filter: brightness(0.4) saturate(1.6); }
 [data-theme='light'] .rung .n { color: var(--text); }
 [data-theme='light'] .rung:last-child .n { color: #0a0c08; }
 [data-theme='light'] .ptab[aria-selected='true'] { background: color-mix(in srgb, var(--c) 14%, var(--surface)); }

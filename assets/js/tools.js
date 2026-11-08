@@ -9,7 +9,7 @@
   const persist = (k, v) => { const t = KX.store.get('tools', {}) || {}; t[k] = v; KX.store.set('tools', t); };
   const num = (el) => { const v = parseFloat(String(el.value).replace(',', '.')); return isFinite(v) ? v : NaN; };
   const inRange = (el) => { const v = num(el); const ok = isFinite(v) && v >= +el.min && v <= +el.max; el.setAttribute('aria-invalid', !ok); return ok ? v : NaN; };
-  const fmtN = (n, d) => Number(n).toLocaleString('he-IL', { maximumFractionDigits: d || 0, minimumFractionDigits: d || 0 });
+  const fmtN = (n, d) => Number(n).toLocaleString(KX.loc, { maximumFractionDigits: d || 0, minimumFractionDigits: d || 0 });
   const field = (id, label, val, min, max, step, unit) =>
     `<label class="tl-field" for="${id}"><span>${label}</span><span class="tl-inp"><input type="number" inputmode="decimal" id="${id}" value="${val}" min="${min}" max="${max}" step="${step || 1}" />${unit ? `<small>${unit}</small>` : ''}</span></label>`;
 
@@ -33,7 +33,7 @@
   $('.tl-tabs', mount).addEventListener('keydown', (e) => {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     const i = tabs.indexOf(document.activeElement); if (i < 0) return;
-    const n = tabs[(i + (e.key === 'ArrowLeft' ? 1 : -1) + tabs.length) % tabs.length]; /* RTL: שמאלה = הבא */
+    const n = tabs[(i + (e.key === (document.dir === 'ltr' ? 'ArrowRight' : 'ArrowLeft') ? 1 : -1) + tabs.length) % tabs.length]; /* בכיוון הקריאה */
     selectTab(n); n.focus(); e.preventDefault();
   });
 

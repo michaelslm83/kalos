@@ -181,7 +181,7 @@
   function findVoice() {
     if (!('speechSynthesis' in window)) return null;
     const vs = speechSynthesis.getVoices();
-    heVoice = vs.find((v) => /^he|^iw/i.test(v.lang)) || null;
+    heVoice = KX.isEn ? vs.find((v) => /^en[-_]US/i.test(v.lang)) || vs.find((v) => /^en/i.test(v.lang)) || null : vs.find((v) => /^he|^iw/i.test(v.lang)) || null;
     return heVoice;
   }
   if ('speechSynthesis' in window) { findVoice(); speechSynthesis.addEventListener && speechSynthesis.addEventListener('voiceschanged', findVoice); }
@@ -189,7 +189,7 @@
     if (!data.prefs().voice || !('speechSynthesis' in window)) return false;
     if (!heVoice && !findVoice()) return false; /* בלי קול עברי — לא מקריאים (קול אנגלי יעוות עברית) */
     if (!opts || !opts.queue) speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
+    const u = new SpeechSynthesisUtterance(KX.t ? KX.t(text) : text);
     u.voice = heVoice; u.lang = heVoice.lang; u.rate = 1.05;
     speechSynthesis.speak(u);
     return true;
@@ -211,6 +211,9 @@
   };
 
   /* ---------- parse prescriptions like "4×8–12", "3×20–40 שנ׳", "10 דק׳", "5×1–3" ---------- */
+  /* מינון בעברית: רצפים כמו "3×8–12" או "5–8" מבודדים משמאל לימין (LRI…PDI),
+     אחרת הדפדפן מציג אותם הפוך ("12–8×3") בתוך טקסט מימין לשמאל */
+  KX.bidi = (s) => String(s == null ? '' : s).replace(/\d+(?:\s*[×x–-]\s*\d+)+/g, (m) => '\u2066' + m + '\u2069');
   KX.parseRx = function (rx) {
     rx = String(rx || '');
     let sets = 1, rest = rx;

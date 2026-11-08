@@ -176,7 +176,7 @@
       svg.setAttribute('viewBox', vb.join(' '));
       svg.setAttribute('class', (svg.getAttribute('class') || '') + ' fx');
       svg.innerHTML = '';
-      el('title', {}, svg).textContent = 'הדגמה מונפשת: ' + this.ex.name;
+      el('title', {}, svg).textContent = 'Kalo מדגים: ' + this.ex.name;
       this.gGear = el('g', {}, svg);
       const front = el('g', {});
       const hl = a.hl || [];
@@ -245,6 +245,7 @@
     }
     render(p) {
       const k = solve(p);
+      this.sk = k; /* שלד אחרון — לסימון שרירים בסרטוני Kalo */
       this.torso.setAttribute('d', `M${f1(k.hip[0])},${f1(k.hip[1])} Q${f1(k.ctrl[0])},${f1(k.ctrl[1])} ${f1(k.S[0])},${f1(k.S[1])}`);
       this.neck.setAttribute('x1', f1(k.S[0])); this.neck.setAttribute('y1', f1(k.S[1]));
       this.neck.setAttribute('x2', f1(k.neck[0])); this.neck.setAttribute('y2', f1(k.neck[1]));
@@ -278,5 +279,5 @@
     }
   }
 
-  KX.fig = { L, add, ang, pivotTorso, shoulderOf, lerpPose, Player };
+  KX.fig = { L, add, ang, pivotTorso, shoulderOf, lerpPose, solve, Player };
 })();

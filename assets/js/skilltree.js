@@ -179,7 +179,7 @@
       const demo = e.target.closest('[data-demo]');
       if (demo && KX.app) { closePop(); KX.app.openEx(demo.dataset.demo); return; }
       if (e.target.closest('[data-reset]')) {
-        if (confirm('לאפס את כל ההתקדמות בעץ הסקילים?')) {
+        if (confirm(KX.t('לאפס את כל ההתקדמות בעץ הסקילים?'))) {
           const s = KX.data.skills();
           tracks.forEach((t) => { if (s[t.id]) KX.data.setSkill(t.id, 0); });
           KX.ui.toast('העץ אופס');

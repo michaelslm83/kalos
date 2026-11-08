@@ -102,6 +102,17 @@
     try { await Promise.all(['900 64px Rubik', '800 64px Rubik', '500 32px Heebo', '700 32px Heebo'].map((f) => document.fonts.load(f))); } catch (_) { /* fonts optional */ }
     const cv = Object.assign(document.createElement('canvas'), { width: W, height: H });
     const ctx = cv.getContext('2d');
+    /* באנגלית: מראה של כל הפריסה (שמאל↔ימין), והטקסט מצויר ישר ומתורגם */
+    if (KX.isEn) {
+      ctx.setTransform(-1, 0, 0, 1, W, 0);
+      const ft = ctx.fillText.bind(ctx);
+      ctx.fillText = (t, x, y) => {
+        ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+        const a = ctx.textAlign; ctx.textAlign = a === 'right' ? 'left' : a === 'left' ? 'right' : a; ctx.direction = 'ltr';
+        ft(KX.t(String(t)), W - x, y);
+        ctx.restore();
+      };
+    }
     const DISP = 'Rubik, Heebo, "Segoe UI", sans-serif', BODY = 'Heebo, "Segoe UI", sans-serif';
     /* רקע */
     const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#0d1218'); g.addColorStop(1, '#07090c');
@@ -121,16 +132,16 @@
     /* כותרת */
     let y = P + 230;
     ctx.fillStyle = '#c8ff3d'; ctx.font = `700 30px ${BODY}`;
-    ctx.fillText(KX.date.fromDk(rec.date).toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long' }), R, y);
+    ctx.fillText(KX.date.fromDk(rec.date).toLocaleDateString(KX.loc, { weekday: 'long', day: 'numeric', month: 'long' }), R, y);
     y += 92;
     ctx.fillStyle = '#ffffff'; ctx.font = `800 84px ${DISP}`;
-    wrap(ctx, rec.title || 'אימון', W - 2 * P).slice(0, 2).forEach((ln) => { ctx.fillText(ln, R, y); y += 96; });
+    wrap(ctx, KX.t(rec.title || 'אימון'), W - 2 * P).slice(0, 2).forEach((ln) => { ctx.fillText(ln, R, y); y += 96; });
     /* מדדים */
     const items = rec.items || [];
     const sets = items.reduce((a, it) => a + it.sets.length, 0);
     const reps = items.filter((it) => it.unit !== 'sec').reduce((a, it) => a + it.sets.reduce((p, v) => p + v, 0), 0);
     const secs = items.filter((it) => it.unit === 'sec').reduce((a, it) => a + it.sets.reduce((p, v) => p + v, 0), 0);
-    const stats = [[rec.dur ? KX.fx.fmt(rec.dur) : '—', 'זמן'], [String(sets), 'סטים'], reps || !secs ? [reps.toLocaleString('he-IL'), 'חזרות'] : [String(secs), 'שניות']];
+    const stats = [[rec.dur ? KX.fx.fmt(rec.dur) : '—', 'זמן'], [String(sets), 'סטים'], reps || !secs ? [reps.toLocaleString(KX.loc), 'חזרות'] : [String(secs), 'שניות']];
     y += 10;
     const bw = (W - 2 * P - 2 * 24) / 3;
     stats.forEach(([v, l], i) => {

@@ -1,0 +1,89 @@
+/* KALOS — תוכניות בשלבים + רצועת Kalo + מה ממליצים ברשת */
+.pg-plan { margin: 6px 0 22px; }
+
+/* שלבים */
+.pg-stages { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+.pg-stages button { display: flex; align-items: center; gap: 10px; text-align: start; padding: 10px 12px; border-radius: 16px; border: 1px solid var(--line2); background: var(--surface2); color: var(--text2); cursor: pointer; transition: border-color 0.2s, background 0.2s; min-height: 56px; }
+.pg-stages button:hover { border-color: rgba(var(--fg), 0.3); }
+.pg-stages i { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; font-style: normal; font-weight: 800; font-family: var(--display); border: 2px solid var(--line2); color: var(--muted); }
+.pg-stages span { display: grid; line-height: 1.25; font-weight: 700; }
+.pg-stages small { font-weight: 600; font-size: 0.74rem; color: var(--muted); }
+.pg-stages .done i { background: var(--accent-soft); border-color: rgba(var(--accent-rgb), 0.5); color: var(--accent-text); }
+.pg-stages [aria-selected='true'] { border-color: rgba(var(--accent-rgb), 0.6); background: color-mix(in srgb, var(--accent) 8%, var(--surface2)); color: var(--text); }
+.pg-stages [aria-selected='true'] i { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.pg-goal { color: var(--text2); margin: 0 0 14px; }
+.pg-days { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.pg-days button { min-height: 40px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line2); font-weight: 600; font-size: 0.9rem; color: var(--text2); cursor: pointer; }
+.pg-days [aria-selected='true'] { background: var(--hi); border-color: var(--hi); color: var(--hi-ink); }
+
+/* כותרת הרצועה */
+.ks-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.ks-head h4 { margin: 0; font-size: 1.05rem; }
+.ks-head h4 small { color: var(--muted); font-weight: 500; font-size: 0.84rem; margin-inline-start: 6px; }
+.ks-ctl { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* רצועת Kalo — פס קולנוע נגלל */
+.ks-strip { list-style: none; margin: 0; padding: 12px; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; border-radius: 20px; background: #05070a; border: 1px solid rgba(255, 255, 255, 0.07); position: relative; -webkit-overflow-scrolling: touch;
+  background-image: radial-gradient(circle at 8px 6px, rgba(255, 255, 255, 0.14) 2.5px, transparent 3px), radial-gradient(circle at 8px calc(100% - 6px), rgba(255, 255, 255, 0.14) 2.5px, transparent 3px);
+  background-size: 22px 100%; background-repeat: repeat-x; }
+.ks-card { --c: var(--accent); flex: none; width: 190px; scroll-snap-align: start; display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; background: #0c1117; border: 1px solid rgba(255, 255, 255, 0.08); color: #eef2f6; transition: border-color 0.25s, transform 0.25s; }
+.ks-card:hover, .ks-card:focus-within { border-color: color-mix(in srgb, var(--c) 55%, transparent); }
+.ks-card.swapped { border-color: color-mix(in srgb, var(--c) 45%, transparent); }
+.ks-card.flash { animation: ksFlash 0.6s ease; }
+@keyframes ksFlash { 0% { transform: scale(0.96); } 60% { transform: scale(1.02); } 100% { transform: none; } }
+.ks-fig { position: relative; display: block; width: 100%; aspect-ratio: 1.25; padding: 0; cursor: pointer; background: radial-gradient(70% 70% at 50% 45%, color-mix(in srgb, var(--c) 16%, transparent), transparent 72%), linear-gradient(180deg, #0f151c, #070a0e); }
+.ks-fig > svg { position: absolute; inset: 0; width: 100%; height: 100%; --fig: #eef2f6; }
+.ks-n { position: absolute; z-index: 1; top: 8px; right: 8px; min-width: 24px; height: 24px; padding: 0 6px; display: grid; place-items: center; border-radius: 999px; background: var(--c); color: #0a0c08; font: 800 0.78rem / 1 var(--display); }
+.ks-play { position: absolute; z-index: 1; bottom: 8px; left: 8px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: rgba(200, 255, 61, 0.95); color: #0a0c08; opacity: 0.9; transition: transform 0.2s; }
+.ks-play .ico { width: 14px; height: 14px; margin-left: 2px; }
+.ks-fig:hover .ks-play { transform: scale(1.12); }
+.ks-body { display: flex; flex-direction: column; gap: 3px; padding: 10px 12px 12px; flex: 1; }
+.ks-name { font-weight: 700; line-height: 1.25; }
+.ks-rx { font: 800 1rem / 1.2 var(--display); color: var(--c); }
+.ks-note, .ks-was { color: rgba(238, 242, 246, 0.62); font-size: 0.78rem; line-height: 1.35; }
+.ks-was { color: rgba(238, 242, 246, 0.78); }
+.ks-acts { display: flex; gap: 6px; margin-top: auto; padding-top: 8px; flex-wrap: wrap; }
+.ks-btn { min-height: 34px; padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.16); color: #eef2f6; font-size: 0.8rem; font-weight: 600; cursor: pointer; background: rgba(255, 255, 255, 0.04); }
+.ks-btn:hover { border-color: color-mix(in srgb, var(--c) 60%, transparent); }
+.pg-adv { display: flex; gap: 10px; align-items: flex-start; margin: 14px 0 0; padding: 12px 16px; border-radius: 14px; background: var(--accent-soft); color: var(--text); }
+.pg-adv .ico { flex: none; color: var(--accent-text); margin-top: 3px; }
+
+/* מה ממליצים ברשת */
+.pg-web { margin-top: 18px; padding: 16px 18px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface2); }
+.pg-web h4 { margin: 0 0 10px; font-size: 1rem; }
+.pg-web ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.pg-web li { display: grid; gap: 4px; padding-inline-start: 14px; border-inline-start: 3px solid rgba(var(--accent-rgb), 0.45); }
+.pg-web p { margin: 0; color: var(--text2); line-height: 1.5; }
+.pg-web a { color: var(--accent-text); font-size: 0.8rem; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; width: fit-content; }
+.pg-orig { margin-top: 18px; }
+.pg-orig > summary { cursor: pointer; font-weight: 700; padding: 10px 0; color: var(--text2); }
+.pg-orig > summary:hover { color: var(--text); }
+.pg-orig[open] > summary { margin-bottom: 8px; }
+
+/* קולנוע: רשימת הרצועה */
+.cinema .cn-pl { display: block; margin: 2px 0 0 !important; font-size: 0.78rem; color: rgba(200, 255, 61, 0.85) !important; }
+.cn-list { display: flex; gap: 6px; overflow-x: auto; padding: 10px 12px 0; scrollbar-width: none; }
+.cn-list::-webkit-scrollbar { display: none; }
+.cn-list button { flex: none; display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 4px 12px 4px 6px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.12); color: rgba(238, 242, 246, 0.75); font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+.cn-list button i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); font-style: normal; font-size: 0.72rem; }
+.cn-list button[aria-current='true'] { color: #0a0c08; background: #c8ff3d; border-color: transparent; }
+.cn-list button[aria-current='true'] i { background: rgba(0, 0, 0, 0.15); }
+.km-rx { margin: 0.9em 0 0; font-weight: 600; color: rgba(238, 242, 246, 0.85); }
+.km-rx b { color: var(--c); font-family: Rubik, Heebo, system-ui, sans-serif; font-size: 1.15em; }
+
+[data-theme='light'] .pg-stages [aria-selected='true'] { background: color-mix(in srgb, var(--accent) 14%, var(--surface2)); }
+
+@media (max-width: 640px) {
+  .pg-stages { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .pg-stages button { flex-direction: column; align-items: center; text-align: center; gap: 4px; padding: 8px 4px; }
+  .pg-stages span { font-size: 0.82rem; }
+  .ks-card { width: 160px; }
+  .ks-head .btn { flex: 1; justify-content: center; }
+  .ks-ctl { width: 100%; }
+  .pg-days { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .pg-days button { flex: none; }
+}
+@media (hover: none) { .ks-btn { min-height: 40px; } .pg-days button { min-height: 44px; } }
+/* כשהרצועה מוצגת בקולנוע — להשאיר מקום לשורת התרגילים */
+.cinema:has(.cn-list:not([hidden])) { width: min(1100px, calc(100% - 32px), calc((100dvh - 300px) * 16 / 9)); }
+@media (max-width: 640px) { .cinema:has(.cn-list:not([hidden])) { width: 100%; } }

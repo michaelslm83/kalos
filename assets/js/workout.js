@@ -234,7 +234,7 @@
           </dl>
         </div>
         <ol class="wo-list">${s.items.map((it, i) => `
-          <li style="--c:${colorOf(it.ex)}"><span class="n">${i + 1}</span><span class="t"><b>${esc(it.n)}</b>${it.note ? `<small>${esc(it.note)}</small>` : ''}</span><span class="rx">${it.sets}×${esc(it.label)}${it.unit === 'sec' ? ' שנ׳' : ''}</span></li>`).join('')}
+          <li style="--c:${colorOf(it.ex)}"><span class="n">${i + 1}</span><span class="t"><b>${esc(it.n)}</b>${it.note ? `<small>${esc(it.note)}</small>` : ''}</span><span class="rx">${esc(KX.bidi(it.sets + '×' + it.label))}${it.unit === 'sec' ? ' שנ׳' : ''}</span></li>`).join('')}
         </ol>
         <div class="wo-opts">
           ${S.s.src !== 'challenge' ? `<label class="wo-switch"><input type="checkbox" id="woWarm" ${s.warm ? 'checked' : ''} /><span></span>להתחיל בחימום מודרך (כ־6 דק׳)</label>` : ''}
@@ -259,14 +259,14 @@
         <div class="wo-panel">
           <p class="wo-kicker">חימום ${st.i + 1} מתוך ${KX.warmup.length}</p>
           <h2>${esc(it.n)}</h2>
-          <p class="wo-target">${esc(it.label)} · בקצב נוח</p>
+          <p class="wo-target">${esc(KX.bidi(it.label))} · בקצב נוח</p>
           <div class="wo-actions"><button class="btn btn-accent btn-lg" data-a="next" data-primary>הבא ${icon('i-skip')}</button></div>
           <div class="wo-sec"><button data-a="skipwarm">דלגו על החימום</button></div>
         </div>`;
     }
     const prev = lastFor(it.ex, it.unit);
     const done = S.log[st.i] || [];
-    const tgt = it.unit === 'sec' ? `<b>${it.target}</b> שניות` : `<b>${esc(it.label)}</b> ${it.label === 'מקס׳' ? 'חזרות נקיות' : 'חזרות'}`;
+    const tgt = it.unit === 'sec' ? `<b>${it.target}</b> שניות` : `<b>${esc(KX.bidi(it.label))}</b> ${it.label === 'מקס׳' ? 'חזרות נקיות' : 'חזרות'}`;
     const cues = e ? e.cues.slice(0, 2) : [];
     const control = it.unit === 'sec'
       ? `<div class="wo-hold">
@@ -320,7 +320,7 @@
       </div>
       ${nit ? `<div class="wo-next" style="--c:${colorOf(nit.ex)}">
         ${nit.ex ? `<svg class="wo-nfig" aria-hidden="true"></svg>` : ''}
-        <div><small>הבא בתור</small><b>${esc(nit.n)}</b><span>${nit.warm ? esc(nit.label) : `${S.s.circuit && ns.rounds ? `סבב ${ns.round + 1}` : `סט ${ns.set + 1}/${nit.sets}`} · ${nit.unit === 'sec' ? nit.target + ' שנ׳' : esc(nit.label) + ' חזרות'}`}</span></div>
+        <div><small>הבא בתור</small><b>${esc(nit.n)}</b><span>${nit.warm ? esc(KX.bidi(nit.label)) : `${S.s.circuit && ns.rounds ? `סבב ${ns.round + 1}` : `סט ${ns.set + 1}/${nit.sets}`} · ${nit.unit === 'sec' ? nit.target + ' שנ׳' : esc(nit.label) + ' חזרות'}`}</span></div>
       </div>` : ''}`;
   }
 

@@ -10,8 +10,10 @@
   const P = (o) => Object.assign({ hip: add(o.S, L.torso, o.t + 180) }, o);
   const X = (p, o) => Object.assign({}, p, o);
 
-  /* ---------- תמונות (Pexels — רישיון חופשי) ---------- */
-  const IMG = {
+  /* ---------- תמונות (Pexels — רישיון חופשי) ----------
+     הקבצים שמורים מקומית ב־assets/img בשני גדלים: <key>-s.webp (800px) ו־<key>-l.webp (1600px, flag: 2000px).
+     הכתובות כאן הן המקור, לתיעוד ולהורדה מחדש. */
+  const IMG_SRC = {
     flag: 'https://images.pexels.com/photos/10086629/pexels-photo-10086629.jpeg',
     pullOut: 'https://images.pexels.com/photos/10021269/pexels-photo-10021269.jpeg',
     pushOut: 'https://images.pexels.com/photos/35703187/pexels-photo-35703187/free-photo-of-man-exercising-with-push-ups-in-leafy-outdoor-pathway.jpeg',
@@ -31,7 +33,8 @@
     park: 'https://images.pexels.com/photos/10021280/pexels-photo-10021280.jpeg',
     monkey: 'https://images.pexels.com/photos/14591519/pexels-photo-14591519.jpeg',
   };
-  KX.img = (k, w) => IMG[k] + '?auto=compress&cs=tinysrgb&w=' + (w || 1200);
+  KX.imgSrc = IMG_SRC;
+  KX.img = (k, w) => 'assets/img/' + k + ((w || 1200) > 900 ? '-l' : '-s') + '.webp';
 
   KX.gallery = [
     { k: 'flag', alt: 'דגל אנושי על מתקן חוץ עם קיר גרפיטי', tall: true },

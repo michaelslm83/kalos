@@ -8,9 +8,9 @@
   const HE_DAYS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
   const FEEL = ['', '😮‍💨', '😓', '🙂', '😄', '🔥'];
   const SRC = { quick: 'מודרך', plan: 'מהתוכנית', manual: 'ידני', challenge: 'אתגר', interval: 'אינטרוולים', test: 'מבחן' };
-  const nf = (n) => Math.round(n).toLocaleString('he-IL');
+  const nf = (n) => Math.round(n).toLocaleString(KX.loc);
   const shortDate = (k) => { const d = dt.fromDk(k); return d.getDate() + '/' + (d.getMonth() + 1); };
-  const longDate = (k) => dt.fromDk(k).toLocaleDateString('he-IL', { weekday: 'short', day: 'numeric', month: 'short' });
+  const longDate = (k) => dt.fromDk(k).toLocaleDateString(KX.loc, { weekday: 'short', day: 'numeric', month: 'short' });
   const exName = (id) => (KX.exMap[id] ? KX.exMap[id].name : id);
   const setsOf = (w) => (w.items || []).reduce((a, it) => a + (it.sets || []).length, 0);
   const repsOf = (w) => (w.items || []).filter((it) => it.unit !== 'sec').reduce((a, it) => a + it.sets.reduce((p, v) => p + (+v || 0), 0), 0);
@@ -286,7 +286,7 @@
       ${tile('רצף ימים', nf(c.streak.days), c.streak.best ? `השיא: ${c.streak.best} ימים` : 'אימון היום מתחיל רצף', 'i-fire')}
       ${tile('רצף שבועות', nf(c.streak.weeks), 'שבועות עם 2+ אימונים', 'i-cal')}
       ${tile('סך חזרות', nf(c.totals.reps), c.totals.sec ? `+ ${KX.fx.fmtDur(c.totals.sec)} בהחזקות` : `${nf(c.totals.sets)} סטים`)}
-      ${tile('זמן אימון', c.totals.dur >= 3600 ? (c.totals.dur / 3600).toLocaleString('he-IL', { maximumFractionDigits: 1 }) + ' שע׳' : Math.round(c.totals.dur / 60) + ' דק׳', `${nf(c.workouts.length)} אימונים ביומן`)}
+      ${tile('זמן אימון', c.totals.dur >= 3600 ? (c.totals.dur / 3600).toLocaleString(KX.loc, { maximumFractionDigits: 1 }) + ' שע׳' : Math.round(c.totals.dur / 60) + ' דק׳', `${nf(c.workouts.length)} אימונים ביומן`)}
     </div>`;
   }
   function historyHTML(ws) {
@@ -308,7 +308,7 @@
     return `<p class="bd-sum"><b>${n}</b> מתוך ${KX.badges.length} הישגים</p>
       <ul class="bd-grid">${KX.badges.map((b) => {
         const on = !!got[b.id], pr = on ? 1 : b.check(c);
-        return `<li class="${on ? 'on' : ''}" title="${esc(b.d)}${on ? ' · נפתח ב־' + new Date(got[b.id]).toLocaleDateString('he-IL') : ''}">
+        return `<li class="${on ? 'on' : ''}" title="${esc(b.d)}${on ? ' · נפתח ב־' + new Date(got[b.id]).toLocaleDateString(KX.loc) : ''}">
           <span class="bd-ic" aria-hidden="true">${on ? b.ic : icon('i-lock')}</span><b>${esc(b.n)}</b><small>${esc(b.d)}</small>
           ${on ? '' : `<span class="bd-pr" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pr * 100)}" aria-label="התקדמות"><i style="width:${Math.round(pr * 100)}%"></i></span>`}
         </li>`;
@@ -449,7 +449,7 @@
     r.onload = () => {
       let o;
       try { o = JSON.parse(r.result); if (!o || o.app !== 'kalos' || typeof o.data !== 'object') throw 0; } catch (_) { toast('זה לא קובץ גיבוי של KALOS'); return; }
-      if (!window.confirm('השחזור יחליף את כל הנתונים הנוכחיים בדפדפן הזה. להמשיך?')) return;
+      if (!window.confirm(KX.t('השחזור יחליף את כל הנתונים הנוכחיים בדפדפן הזה. להמשיך?'))) return;
       const allowed = ['workouts', 'favs', 'skills', 'tests', 'challenges', 'badges', 'prefs', 'plan', 'tools', 'woWarm'];
       const clean = { app: 'kalos', data: {} };
       allowed.forEach((k) => { if (o.data[k] !== undefined) clean.data[k] = o.data[k]; });
