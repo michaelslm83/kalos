@@ -4,7 +4,7 @@
    - גופנים ותמונות מקומיים: גופנים במטמון מראש, תמונות נשמרות כשהן נצפות
    - אין תלות ברשת חיצונית: סרטוני Kalo נוצרים בדפדפן
    - בקשות OpenStreetMap (מצא פארק) ומפות מוטמעות עוברות ישר לרשת ולא נשמרות */
-const VERSION = 'kalos-v6'; /* להעלות בכל שינוי בקבצים המקומיים */
+const VERSION = 'kalos-v7'; /* להעלות בכל שינוי בקבצים המקומיים */
 const CORE = VERSION + '-core';
 const RUNTIME = VERSION + '-runtime';
 const RUNTIME_MAX = 120;
@@ -23,6 +23,7 @@ const PRECACHE = [
   'assets/css/parks.css',
   'assets/css/programs.css',
   'assets/css/a11y.css',
+  'assets/css/responsive.css',
   'assets/js/figure.js',
   'assets/js/data.js',
   'assets/js/exercises-extra.js',

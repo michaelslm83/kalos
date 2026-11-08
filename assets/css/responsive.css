@@ -1,0 +1,98 @@
+/* KALOS — התאמה לטלפונים, מתקפלים, טאבלטים ומחשבים (כולל הגדלת טקסט של המערכת) */
+
+/* שורת כלים בתוך התפריט (מוצגת רק כשהכלים לא נכנסים לסרגל) */
+.menu-tools { display: none; }
+
+@media (max-width: 640px) {
+  /* סרגל עליון: לוגו + "האימון שלי" + תפריט. נגישות, שפה ומצב תצוגה עוברים לתפריט */
+  .nav-tools #a11yToggle, .nav-tools #langToggle, .nav-tools #themeToggle { display: none; }
+  .nav-in { gap: 10px; }
+  .logo { min-width: 0; }
+  .menu-tools { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 4px 0 12px; margin-bottom: 6px; border-bottom: 1px solid var(--line); }
+  .menu-tools button { flex: 1 1 0; min-width: 0; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 10px; border-radius: 14px; border: 1px solid var(--line2); background: rgba(var(--fg), 0.04); color: var(--text); font: inherit; font-weight: 600; font-size: 0.95rem; cursor: pointer; }
+  .menu-tools .ico { width: 20px; height: 20px; flex: none; }
+  .menu-tools span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* טיפוגרפיה וריווחים מותאמים למסך צר */
+  body { font-size: 16px; }
+  .hero h1 { font-size: clamp(2.2rem, 10.5vw, 2.9rem); margin: 16px 0 18px; }
+  .hero .lead, .hero-in p.lead { font-size: 1.02rem; }
+  .sec-head h2 { font-size: clamp(1.75rem, 8.2vw, 2.25rem); }
+  .section { padding: clamp(64px, 16vw, 90px) 0; }
+  .btn-lg { padding: 15px 22px; font-size: 1rem; }
+  /* כפתורי הפתיחה זה מתחת לזה — הטקסט לא יוצא מהכפתור */
+  .hero-ctas { flex-direction: column; align-items: stretch; }
+  .hero-ctas .btn { flex: none; width: 100%; justify-content: center; white-space: normal; text-align: center; }
+  .timer-fab { width: 52px; height: 52px; }
+}
+@media (max-width: 340px) {
+  .logo-txt { font-size: 1.15rem; }
+  .wrap { padding-inline: 14px; }
+  .menu-tools button { flex-basis: 100%; }
+}
+@media (max-width: 300px) {
+  .logo-txt { display: none; }
+}
+
+/* חלון אימון מודרך: ברוחב האזור הנראה (בלי פס הגלילה) */
+.wo { width: 100%; max-width: 100%; }
+
+/* טלפון לרוחב / מסכים נמוכים: התפריט נגלל והסרגל נמוך יותר */
+@media (max-height: 480px) and (orientation: landscape) {
+  :root { --nav-h: calc(60px + env(safe-area-inset-top, 0px)); }
+  .nav-links a { min-height: 40px; padding-block: 8px; }
+  .hero-in { padding-top: calc(var(--nav-h) + 16px); padding-bottom: 40px; }
+}
+
+/* הגדלת טקסט של המערכת (Android / iOS) — אסור שמשהו ייחתך */
+.nav-links a, .btn, .chip, .tag { overflow-wrap: anywhere; }
+.btn { max-width: 100%; }
+
+/* קולאז' התמונות ב"מה זה": עמודות גמישות במסכים צרים מאוד */
+.collage { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+.about-grid > *, .collage > * { min-width: 0; }
+
+/* מסכים צרים מאוד (320px, מתקפל סגור 280px) */
+@media (max-width: 420px) {
+  .c-badge { inset-inline-end: 8px; max-width: calc(100% - 16px); padding: 10px 14px; gap: 10px; }
+  .c-badge b { font-size: 1.7rem; }
+  .st-next { min-width: 0; flex-basis: 100%; }
+}
+@media (max-width: 640px) {
+  .pk-form { flex-basis: 100%; min-width: 0; }
+}
+@media (max-width: 340px) {
+  .kv-filters { margin-inline: -14px; padding-inline: 14px; }
+}
+/* "κάλλος + σθένος": נשבר לשורות במסך צר במקום לצאת מהמסך */
+@media (max-width: 420px) {
+  .etym { flex-wrap: wrap; gap: 10px 14px; }
+  .etym > div { min-width: 0; }
+  .etym b { font-size: clamp(1.4rem, 8vw, 2rem); }
+}
+@media (max-width: 300px) {
+  .wq-grid { grid-template-columns: minmax(0, 1fr); }
+}
+/* כרטיסים ברשת: עמודה אחת גמישה כשאין מקום למינימום של 260–290px */
+@media (max-width: 340px) {
+  .ch-grid, .ex-grid, .pd-blocks, .week, .wq-grid { grid-template-columns: minmax(0, 1fr); }
+  .timeline { grid-auto-columns: minmax(0, 86%); }
+}
+/* עמידות להגדלת טקסט במסכים צרים */
+.warm > *, .me-kpis > *, .me-empty, .kpi { min-width: 0; }
+.warm-copy .btn { white-space: normal; }
+@media (max-width: 380px) {
+  .pk-radius { flex-wrap: wrap; border-radius: 18px; }
+  .pk-radius button { flex: 1 1 40%; }
+  .me-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 340px) {
+  .warm { padding: 22px 16px; gap: 22px; }
+  .warm-list li { min-width: 0; }
+}
+/* שורת הכלים בתפריט: אייקון מעל תווית — בלי חיתוך של הטקסט */
+@media (max-width: 640px) {
+  .menu-tools button { flex-direction: column; gap: 4px; min-height: 64px; padding: 8px 6px; font-size: 0.84rem; line-height: 1.2; }
+  .menu-tools span { white-space: normal; overflow: visible; text-align: center; }
+  .menu-tools .mt-badge { display: grid; place-items: center; min-width: 26px; height: 20px; padding: 0 4px; border-radius: 6px; border: 1.5px solid currentColor; font: 800 0.68rem / 1 var(--display, sans-serif); }
+}

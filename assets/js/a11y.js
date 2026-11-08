@@ -150,5 +150,29 @@
   document.addEventListener('click', (e) => { const a = e.target.closest('a[href="#a11y-statement"]'); if (a && !a.closest('.a11y-dlg')) { e.preventDefault(); openStatement(); } });
   if (location.hash === '#a11y-statement') setTimeout(openStatement, 300);
 
+  /* תפריט הטלפון: Esc סוגר ומחזיר את המיקוד לכפתור */
+  function closeMenu() { const bg = document.getElementById('burger'); if (bg && bg.getAttribute('aria-expanded') === 'true') { bg.click(); return bg; } return null; }
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !document.querySelector('dialog[open]')) { const bg = closeMenu(); if (bg) bg.focus(); } });
+
+  /* ---------- בטלפון: נגישות, שפה ומצב תצוגה בתוך התפריט ---------- */
+  const menu = document.getElementById('navLinks');
+  if (menu && !menu.querySelector('.menu-tools')) {
+    const li = document.createElement('li');
+    li.className = 'menu-tools';
+    li.setAttribute('data-no-i18n', '');
+    li.innerHTML = `
+      <button type="button" data-mt="a11y">${icon('i-access')}<span>${T('נגישות', 'Accessibility')}</span></button>
+      <button type="button" data-mt="lang" lang="${en ? 'he' : 'en'}"><b class="mt-badge" aria-hidden="true">${en ? 'עב' : 'EN'}</b><span>${en ? 'עברית' : 'English'}</span></button>
+      <button type="button" data-mt="theme">${icon('i-contrast')}<span>${T('בהיר / כהה', 'Light / dark')}</span></button>`;
+    menu.insertBefore(li, menu.firstChild);
+    li.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-mt]'); if (!b) return;
+      const t = b.dataset.mt;
+      if (t === 'a11y') { closeMenu(); openPanel(); }
+      else if (t === 'lang') KX.setLang(en ? 'he' : 'en');
+      else if (t === 'theme') { const tb = document.getElementById('themeToggle'); if (tb) tb.click(); }
+    });
+  }
+
   apply(get());
 })();
