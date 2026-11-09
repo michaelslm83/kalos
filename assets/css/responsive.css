@@ -29,6 +29,9 @@
   .logo-txt { font-size: 1.15rem; }
   .wrap { padding-inline: 14px; }
   .menu-tools button { flex-basis: 100%; }
+  /* חימום: משך השלב יורד שורה במקום לחרוג מהכרטיס (מסך צר + טקסט מוגדל) */
+  .warm-list li { flex-wrap: wrap; }
+  .warm-list li small { white-space: normal; }
 }
 @media (max-width: 300px) {
   .logo-txt { display: none; }

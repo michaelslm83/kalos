@@ -20,7 +20,7 @@
   ],
   "shortcuts": [
     { "name": "אימונים מודרכים", "short_name": "אימונים", "url": "./#workouts", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
-    { "name": "האימון שלי", "short_name": "האימון שלי", "url": "./#me", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
-    { "name": "טיימר וכלים", "short_name": "כלים", "url": "./#tools", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+    { "name": "האזור האישי", "short_name": "האזור האישי", "url": "./#my", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "טיימר אינטרוולים וכלים", "short_name": "כלים", "url": "./#tools", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
   ]
 }

@@ -121,7 +121,7 @@
             <li>${T('ניווט מלא במקלדת, קישור "דלג לתוכן" ומסגרת מיקוד בולטת.', 'Full keyboard navigation, a “skip to content” link and a clear focus outline.')}</li>
             <li>${T('מבנה כותרות ואזורים (landmarks) תקני, ותוויות לכל כפתור, שדה וחלון.', 'Proper heading and landmark structure, and labels for every button, field and dialog.')}</li>
             <li>${T('טקסט חלופי לתמונות, וכל הדגמה מונפשת מלווה בהוראות כתובות, דגשים וטעויות נפוצות.', 'Alternative text for images; every animated demo comes with written steps, cues and common mistakes.')}</li>
-            <li>${T('סרטוני Kalo כוללים כתוביות, פרקים, עצירה וגלילה בציר הזמן, ותיאור קולי לקורא מסך.', 'Kalo films include captions, chapters, pause and seeking, and announcements for screen readers.')}</li>
+            <li>${T('סרטוני ההדרכה כוללים כתוביות, פרקים, עצירה וגלילה בציר הזמן, ותיאור קולי לקורא מסך.', 'Training films include captions, chapters, pause and seeking, and announcements for screen readers.')}</li>
             <li>${T('ניגודיות צבעים מספקת במצב כהה ובהיר, ותמיכה בהעדפת "הפחתת תנועה" של המערכת.', 'Sufficient color contrast in dark and light modes, and support for the system “reduce motion” setting.')}</li>
             <li>${T('תפריט נגישות: הגדלת טקסט, ניגודיות גבוהה, הדגשת קישורים, עצירת אנימציות, גופן קריא וריווח טקסט.', 'An accessibility menu: text size, high contrast, highlighted links, stop animations, readable font and text spacing.')}</li>
             <li>${T('האתר זמין בעברית ובאנגלית, ותומך בהגדלת תצוגה עד 200% בלי אובדן תוכן.', 'The site is available in Hebrew and English and supports zoom up to 200% without losing content.')}</li>

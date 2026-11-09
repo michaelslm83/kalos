@@ -129,6 +129,11 @@
     $('#favOnly').setAttribute('aria-pressed', state.fav);
     renderGrid();
   });
+  /* "Cali מדגימה" / "Stheni מדגים" — מתעדכן כשמחליפים מדריך (my.js) */
+  function coachTag(ex) {
+    const c = KX.coaches[KX.coachFor(ex)];
+    return `<span class="tag tag-coach" data-coach-tag="${ex.id}" style="--coach:${c.color}"><i aria-hidden="true"></i>${c.name} ${KX.coachVerb(c.id, 'מדגימה', 'מדגים')}</span>`;
+  }
   function favBtnHTML(type, id, name) {
     const on = isFav(type, id);
     return `<button class="fav-btn${on ? ' on' : ''}" data-fav="${type}:${id}" aria-pressed="${on}" aria-label="${on ? 'הסר ממועדפים' : 'הוסף למועדפים'}: ${esc(name)}">${icon(on ? 'i-star-f' : 'i-star')}</button>`;
@@ -317,7 +322,7 @@
     if (mTab === 'cues') html = `<ul class="ilist good">${ex.cues.map((s) => `<li>${icon('i-check')}<span>${esc(s)}</span></li>`).join('')}</ul>`;
     if (mTab === 'mistakes') html = `<ul class="ilist bad">${ex.mistakes.map((s) => `<li>${icon('i-x')}<span>${esc(s)}</span></li>`).join('')}</ul>` + (mPlayer.bad ? `<button class="btn btn-ghost btn-sm" id="showBad" style="margin-top:8px">${icon('i-play')} הצג את הטעות בהדגמה</button>` : '');
     if (mTab === 'prog') html = `<div class="pgrid"><div class="e"><small>קל יותר ↓</small><p>${esc(ex.easier)}</p></div><div class="h"><small>קשה יותר ↑</small><p>${esc(ex.harder)}</p></div></div>`;
-    if (mTab === 'video') html = `<div class="m-movie"></div><p class="vnote">סרטון Kalo: ביצוע נכון, השרירים שעובדים, צעד אחר צעד בהילוך איטי, הטעויות הנפוצות ואיך לתקן אותן.</p>`;
+    if (mTab === 'video') html = `<div class="m-movie"></div><p class="vnote">סרטון הדרכה: ביצוע נכון, השרירים שעובדים, צעד אחר צעד בהילוך איטי, הטעויות הנפוצות ואיך לתקן אותן.</p>`;
     if (mMovie) { mMovie.destroy(); mMovie = null; }
     pane.innerHTML = html;
     pane.style.animation = 'none'; void pane.offsetWidth; pane.style.animation = '';
@@ -342,7 +347,7 @@
     mPlayer.reset();
     if (!reduce) mPlayer.play();
     setPlayIcon(!reduce);
-    $('#mTags').innerHTML = `<span class="tag" style="color:${catColor(ex.cat)}"><i></i>${KX.cats[ex.cat].name}</span><span class="tag">${KX.levels[ex.level]}</span>` + `<button type="button" class="tag tag-btn" data-go="video">${icon('i-play')} סרטון Kalo</button>` + favBtnHTML('ex', ex.id, ex.name).replace('fav-btn', 'fav-btn fav-inline');
+    $('#mTags').innerHTML = `<span class="tag" style="color:${catColor(ex.cat)}"><i></i>${KX.cats[ex.cat].name}</span><span class="tag">${KX.levels[ex.level]}</span>` + `<button type="button" class="tag tag-btn" data-go="video">${icon('i-play')} סרטון הדרכה</button>` + coachTag(ex) + favBtnHTML('ex', ex.id, ex.name).replace('fav-btn', 'fav-btn fav-inline');
     $('#mTitle').textContent = ex.name;
     $('#mEn').textContent = ex.en;
     $('#mSum').textContent = ex.summary;
@@ -566,15 +571,15 @@
   $('#bento').innerHTML = KX.principles.map((p) => `<article class="bt reveal${p.wide ? ' wide' : ''}"><span class="big">${esc(p.big)}</span><span class="unit">${esc(p.unit)}</span><h3>${esc(p.h)}</h3><p>${esc(p.p)}</p></article>`).join('');
   $('#warmList').innerHTML = KX.warmup.map((w) => `<li><span>${esc(w.n)}</span><small>${esc(w.t)}</small></li>`).join('');
 
-  /* ---------- סרטוני Kalo ---------- */
+  /* ---------- סרטוני ההדרכה (Cali / Stheni) ---------- */
   const KV_FIRST = 9;
   let kvCat = 'all', kvAll = false;
   const kvList = () => KX.exercises.filter((e) => kvCat === 'all' || e.cat === kvCat);
   const kvDur = {};
   const kvCard = (ex) => {
     const d = kvDur[ex.id] || (kvDur[ex.id] = KX.kalo.fmt(KX.kalo.duration(ex)));
-    return `<button type="button" class="kv-card reveal in" data-kv="${ex.id}" style="--c:${catColor(ex.cat)}" aria-label="נגן סרטון Kalo: ${esc(ex.name)}, ${d}">
-      <span class="kv-poster"><svg data-poster="${ex.id}" aria-hidden="true"></svg><span class="kv-brand"><i>K</i>KALO</span><span class="kv-play">${icon('i-play')}</span><span class="kv-dur">${d}</span></span>
+    return `<button type="button" class="kv-card reveal in" data-kv="${ex.id}" style="--c:${catColor(ex.cat)}" aria-label="נגן סרטון הדרכה: ${esc(ex.name)}, ${d}">
+      <span class="kv-poster"><svg data-poster="${ex.id}" aria-hidden="true"></svg>${KX.kalo.brand(KX.coachFor(ex), 'kv-brand')}<span class="kv-play">${icon('i-play')}</span><span class="kv-dur">${d}</span></span>
       <span class="kv-body"><span class="kv-h">${esc(ex.name)}</span><span class="kv-meta"><span class="kv-cat">${esc(KX.cats[ex.cat].name)}</span> · ${esc(KX.levels[ex.level])} · <span dir="ltr">${esc(ex.en)}</span></span></span></button>`;
   };
   /* תמונות השער נבנות רק כשהכרטיס מתקרב למסך */
@@ -606,7 +611,7 @@
 
   const cinema = $('#cinema');
   let cMovie = null, cEx = null, cPlay = null, cNextT = null;
-  /* opts.playlist: [{ ex, rx, note }] — רצועת Kalo של יום אימון; opts.cut: 'short' לגרסה מקוצרת */
+  /* opts.playlist: [{ ex, rx, note }] — רצועת ההדגמות של יום אימון; opts.cut: 'short' לגרסה מקוצרת */
   function openCinema(id, opts) {
     const ex = KX.exMap[id]; if (!ex) return;
     clearTimeout(cNextT);
@@ -659,30 +664,37 @@
   $('#faqList').innerHTML = KX.faq.map((f, i) => `<details class="reveal"${i === 0 ? ' open' : ''}><summary>${esc(f.q)}<i aria-hidden="true"></i></summary><p class="ans">${esc(f.a)}</p></details>`).join('');
   $$('#faqList details').forEach((d) => d.addEventListener('toggle', () => { if (d.open) $$('#faqList details').forEach((o) => { if (o !== d) o.open = false; }); }));
 
-  /* ---------- timer ---------- */
+  /* ---------- שעון: טיימר מנוחה + סטופר, נפתח מהכפתור בסרגל העליון ----------
+     הכפתור מציג את הזמן שנותר (או את זמן הסטופר) וטבעת התקדמות, גם כשהחלון סגור */
   const T = { total: 90, left: 90, run: false, id: null, queue: null, qi: 0 };
-  const fab = $('#timerFab'), panel = $('#timerPanel'), ringFg = $('#ringFg');
+  const SW = { run: false, base: 0, t0: 0, laps: [], id: null };
+  const navT = $('#navTimer'), navTT = $('#navTimerT'), panel = $('#timerPanel'), ringFg = $('#ringFg');
   const C = 2 * Math.PI * 52;
   ringFg.style.strokeDasharray = C;
-  const fmt = (s) => Math.floor(s / 60) + ':' + String(Math.ceil(s % 60) === 60 ? 0 : Math.ceil(s % 60)).padStart(2, '0');
+  const fmt = (s) => { const c = Math.ceil(Math.max(0, s)); return Math.floor(c / 60) + ':' + String(c % 60).padStart(2, '0'); };
+  const swNow = () => SW.base + (SW.run ? performance.now() - SW.t0 : 0);
+  const fmtSw = (ms) => { const s = Math.floor(ms / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0') + '.' + Math.floor((ms % 1000) / 100); };
+  const announce = (t) => { $('#tpLive').textContent = t; };
+  /* כפתור הסרגל: טיימר המנוחה קודם, ואחריו הסטופר */
+  function drawNav() {
+    const rest = T.run || (T.left > 0 && T.left < T.total);
+    const sw = !rest && (SW.run || SW.base > 0);
+    navT.classList.toggle('running', T.run || SW.run);
+    navT.classList.toggle('has-time', rest || sw);
+    navTT.textContent = rest ? fmt(Math.max(0, T.left)) : sw ? fmtSw(swNow()).replace(/\.\d$/, '') : '';
+    navT.style.setProperty('--p', rest ? (1 - Math.max(0, T.left) / T.total).toFixed(3) : sw ? ((swNow() / 1000) % 60 / 60).toFixed(3) : 0);
+    const st = rest ? `טיימר מנוחה: נותרו ${fmt(Math.max(0, T.left))}` : sw ? `סטופר: ${fmtSw(swNow())}` : '';
+    navT.setAttribute('aria-label', 'שעון: טיימר מנוחה וסטופר' + (st ? ' · ' + st : ''));
+  }
   function drawT() {
     $('#tpTime').textContent = fmt(Math.max(0, T.left));
     ringFg.style.strokeDashoffset = C * (1 - Math.max(0, T.left) / T.total);
     $('#tpGo').textContent = T.run ? 'השהה' : T.left < T.total ? 'המשך' : 'התחל';
     $('#timer').classList.toggle('running', T.run);
+    drawNav();
   }
   function beep() {
-    try {
-      const ac = new (window.AudioContext || window.webkitAudioContext)();
-      [0, 0.22, 0.44].forEach((d, i) => {
-        const o = ac.createOscillator(), g = ac.createGain();
-        o.frequency.value = i === 2 ? 1320 : 880; o.connect(g); g.connect(ac.destination);
-        g.gain.setValueAtTime(0.0001, ac.currentTime + d);
-        g.gain.exponentialRampToValueAtTime(0.25, ac.currentTime + d + 0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + d + 0.18);
-        o.start(ac.currentTime + d); o.stop(ac.currentTime + d + 0.2);
-      });
-    } catch (_) { /* no audio */ }
+    if (KX.fx && KX.fx.beep) { KX.fx.beep('done'); return; } /* מכבד את הגדרת הצליל של המשתמש */
     if (navigator.vibrate) navigator.vibrate([120, 80, 120]);
   }
   function setT(sec) { T.total = T.left = sec; stopT(); drawT(); }
@@ -693,25 +705,78 @@
     clearInterval(T.id);
     T.id = setInterval(() => {
       const now = performance.now(); T.left -= (now - last) / 1000; last = now;
-      if (T.left <= 0) { T.left = 0; stopT(); beep(); nextWarm(); }
+      if (T.left <= 0) { T.left = 0; stopT(); beep(); announce('המנוחה נגמרה'); if (!T.queue) toast('המנוחה נגמרה, לסט הבא! 💪'); nextWarm(); }
       drawT();
     }, 200);
     drawT();
   }
+  /* סטופר */
+  function drawSw() {
+    $('#swTime').textContent = fmtSw(swNow());
+    $('#swGo').textContent = SW.run ? 'השהה' : SW.base > 0 ? 'המשך' : 'התחל';
+    $('#swLap').disabled = !SW.run;
+    $('#swReset').disabled = SW.run || SW.base === 0;
+    drawNav();
+  }
+  function swTick() { drawSw(); }
+  function swToggle() {
+    if (SW.run) { SW.base = swNow(); SW.run = false; clearInterval(SW.id); announce('הסטופר נעצר ב־' + fmtSw(SW.base)); }
+    else { SW.t0 = performance.now(); SW.run = true; clearInterval(SW.id); SW.id = setInterval(swTick, 100); if (KX.fx) KX.fx.audio(); }
+    drawSw();
+  }
+  function swLap() {
+    if (!SW.run) return;
+    const t = swNow(), prev = SW.laps.length ? SW.laps[SW.laps.length - 1] : 0;
+    SW.laps.push(t);
+    const li = document.createElement('li');
+    li.innerHTML = `<span>הקפה ${SW.laps.length}</span><b dir="ltr">${fmtSw(t - prev)}</b><small dir="ltr">${fmtSw(t)}</small>`;
+    $('#swLaps').prepend(li);
+    announce(`הקפה ${SW.laps.length}: ${fmtSw(t - prev)}`);
+  }
+  function swReset() { SW.run = false; clearInterval(SW.id); SW.base = 0; SW.laps = []; $('#swLaps').innerHTML = ''; drawSw(); }
+  $('#swGo').addEventListener('click', swToggle);
+  $('#swLap').addEventListener('click', swLap);
+  $('#swReset').addEventListener('click', swReset);
+  /* לשוניות (מקלדת: חצים) */
+  const tabs = $$('.tp-modes [role="tab"]');
+  function setClockMode(m, focus) {
+    tabs.forEach((t) => { const on = t.dataset.tmode === m; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); });
+    $('#tpRest').hidden = m !== 'rest';
+    $('#tpSw').hidden = m !== 'sw';
+  }
+  $('.tp-modes').addEventListener('click', (e) => { const b = e.target.closest('[data-tmode]'); if (b) setClockMode(b.dataset.tmode); });
+  $('.tp-modes').addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Home' && e.key !== 'End') return;
+    e.preventDefault();
+    const cur = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+    const n = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : (cur + 1) % tabs.length;
+    setClockMode(tabs[n].dataset.tmode, true);
+  });
+  /* פתיחה וסגירה: Escape וקליק מחוץ לחלון סוגרים, והמיקוד חוזר לכפתור */
   function togglePanel(open) {
     panel.hidden = !open;
-    fab.setAttribute('aria-expanded', open);
+    navT.setAttribute('aria-expanded', open);
+    if (open) { const sel = tabs.find((t) => t.getAttribute('aria-selected') === 'true'); (sel || tabs[0]).focus({ preventScroll: true }); }
   }
-  fab.addEventListener('click', () => togglePanel(panel.hidden));
+  navT.addEventListener('click', () => togglePanel(panel.hidden));
+  $('#tpClose').addEventListener('click', () => { togglePanel(false); navT.focus(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !panel.hidden && !document.querySelector('dialog[open]')) { togglePanel(false); navT.focus(); } });
+  document.addEventListener('pointerdown', (e) => { if (!panel.hidden && !panel.contains(e.target) && !navT.contains(e.target) && !e.target.closest('#warmStart')) togglePanel(false); });
   $('#tpPresets').addEventListener('click', (e) => {
     const b = e.target.closest('button'); if (!b) return;
     endWarm();
     $$('#tpPresets button').forEach((x) => x.classList.toggle('on', x === b));
     setT(+b.dataset.sec);
   });
-  $('#tpGo').addEventListener('click', () => (T.run ? stopT() : (T.left <= 0 && setT(T.total), startT())));
+  $('#tpGo').addEventListener('click', () => (T.run ? stopT() : (T.left <= 0 && setT(T.total), KX.fx && KX.fx.audio(), startT())));
   $('#tpReset').addEventListener('click', () => { endWarm(); setT(T.total); });
   drawT();
+  drawSw();
+  /* מודולים אחרים (האזור האישי) פותחים את השעון ומתחילים מנוחה */
+  KX.timer = {
+    open: (mode) => { setClockMode(mode || 'rest'); togglePanel(true); },
+    rest: (sec) => { endWarm(); setClockMode('rest'); setT(sec || 90); togglePanel(true); startT(); },
+  };
 
   /* חימום מודרך */
   const warmItems = () => $$('#warmList li');

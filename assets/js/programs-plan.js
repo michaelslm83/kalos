@@ -1,5 +1,5 @@
 /* KALOS — תוכניות מוכחות בשלבים: לכל תוכנית 3 שלבים, ימי אימון עם תרגילים מהספרייה,
-   רצועת Kalo (הדגמה מונפשת לכל תרגיל + ניגון רציף של סרטוני Kalo מקוצרים),
+   רצועת הדגמות (הדגמה מונפשת לכל תרגיל + ניגון רציף של סרטוני הדרכה מקוצרים),
    החלפת תרגיל בחלופה מאותה קטגוריה, אימון מודרך, ו"מה ממליצים ברשת" עם קישור למקור. */
 (function () {
   'use strict';
@@ -210,7 +210,7 @@
     });
   };
 
-  /* ---------- רצועת Kalo: מיני־הדגמות שמתנגנות כשהן במסך ---------- */
+  /* ---------- רצועת הדגמות: מיני־הדגמות שמתנגנות כשהן במסך ---------- */
   let players = [];
   const io = 'IntersectionObserver' in window ? new IntersectionObserver((ents) => ents.forEach((en) => {
     const p = en.target.__kp; if (!p) return;
@@ -235,7 +235,7 @@
       const e = KX.exMap[it.id]; if (!e) return '';
       const c = KX.cats[e.cat].color, can = alts(it.orig).length > 0;
       return `<li class="ks-card${it.swapped ? ' swapped' : ''}" style="--c:${c}" data-k="${it.k}" data-ex="${it.id}">
-        <button type="button" class="ks-fig" data-act="film" aria-label="סרטון Kalo: ${esc(e.name)}">
+        <button type="button" class="ks-fig" data-act="film" aria-label="סרטון הדרכה: ${esc(e.name)}">
           <span class="ks-n">${pick ? 'או' : j + 1}</span><svg data-kfig="${it.id}" aria-hidden="true"></svg><span class="ks-play">${icon('i-play')}</span>
         </button>
         <div class="ks-body">
@@ -273,11 +273,11 @@
         <div class="ks-head">
           <h4>${esc(day.name)} <small>${day.items.length} תרגילים${day.pick ? '' : ` · ${sets} סטים`}</small></h4>
           <div class="ks-ctl">
-            <button type="button" class="btn btn-ghost btn-sm" data-act="reel">${icon('i-play')} רצועת Kalo</button>
+            <button type="button" class="btn btn-ghost btn-sm" data-act="reel">${icon('i-play')} רצועת הדגמות</button>
             ${day.pick ? '' : `<button type="button" class="btn btn-accent btn-sm" data-act="start">${icon('i-play')} אימון מודרך</button>`}
           </div>
         </div>
-        <ol class="ks-strip" aria-label="רצועת Kalo: ${esc(day.name)}">${stripHTML(p.id, s.stage, s.day, day.pick)}</ol>
+        <ol class="ks-strip" aria-label="רצועת הדגמות: ${esc(day.name)}">${stripHTML(p.id, s.stage, s.day, day.pick)}</ol>
         <p class="pg-adv">${icon('i-bolt')}<span><b>מתי עוברים שלב:</b> ${esc(stg.advance)}</span></p>
       </div>
       <div class="pg-web">
@@ -320,7 +320,7 @@
     if (act === 'start') { startGuided(p, s.stage, stg, day, items); }
   }
 
-  /* ניגון רציף של סרטוני Kalo מקוצרים עם המינון של התוכנית */
+  /* ניגון רציף של סרטוני הדרכה מקוצרים עם המינון של התוכנית */
   function reel(p, stg, day, items, i, single) {
     const list = items.map((it) => ({ ex: it.id, rx: it.rx, note: it.note }));
     KX.openCinema(list[i].ex, { playlist: list, idx: i, title: `${p.title} · ${stg.name} · ${day.name}`, cut: single ? null : 'short' });

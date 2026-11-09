@@ -90,7 +90,8 @@
     if (!key) return s;
     const hit = exact.get(key);
     if (hit != null) return hit;
-    if (cache.has(key)) return cache.get(key);
+    /* null במטמון = "אין תרגום": מחזירים את הקלט עצמו (לא את הקלט של קריאה קודמת עם רווחים אחרים) */
+    if (cache.has(key)) { const c = cache.get(key); return c == null ? s : c; }
     let out = null;
     /* צירוף של מחרוזות מוכרות (" · ") — לפני הדפוסים, כדי שדפוס כללי כמו "יום {0}" לא יבלע אותו */
     if (key.indexOf(' · ') > -1) {
@@ -108,8 +109,8 @@
       break;
     }
     if (out == null && depth < 5) out = fallback(key, depth);
-    if (out == null) { missing.add(key); out = s; }
     if (cache.size > 4000) cache.clear();
+    if (out == null) { missing.add(key); cache.set(key, null); return s; }
     cache.set(key, out);
     return out;
   }
@@ -177,7 +178,10 @@
     if (p && p.closest(SKIP)) return;
     const lead = v.match(/^\s*/)[0], trail = v.match(/\s*$/)[0];
     const t = tr(v, 0);
-    if (t !== v) n.nodeValue = lead + t.trim() + trail;
+    /* כותבים רק אם הערך באמת השתנה: כתיבה של אותו ערך יוצרת רשומת מוטציה חדשה,
+       וה־MutationObserver היה נכנס ללולאה אינסופית (למשל כשהתרגום שונה רק ברווחים) */
+    const nv = lead + t.trim() + trail;
+    if (t !== v && nv !== v) n.nodeValue = nv;
   }
   function txAttrs(el) {
     if (el.closest && el.closest(SKIP)) return;

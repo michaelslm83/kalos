@@ -2,9 +2,9 @@
    - ניווט: רשת קודם, ואם אין חיבור — index.html מהמטמון
    - קבצים מקומיים: stale-while-revalidate (מהיר, ומתעדכן ברקע)
    - גופנים ותמונות מקומיים: גופנים במטמון מראש, תמונות נשמרות כשהן נצפות
-   - אין תלות ברשת חיצונית: סרטוני Kalo נוצרים בדפדפן
+   - אין תלות ברשת חיצונית: סרטוני ההדרכה (Cali / Stheni) נוצרים בדפדפן
    - בקשות OpenStreetMap (מצא פארק) ומפות מוטמעות עוברות ישר לרשת ולא נשמרות */
-const VERSION = 'kalos-v7'; /* להעלות בכל שינוי בקבצים המקומיים */
+const VERSION = 'kalos-v10'; /* להעלות בכל שינוי בקבצים המקומיים */
 const CORE = VERSION + '-core';
 const RUNTIME = VERSION + '-runtime';
 const RUNTIME_MAX = 120;
@@ -22,12 +22,14 @@ const PRECACHE = [
   'assets/css/kalo.css',
   'assets/css/parks.css',
   'assets/css/programs.css',
+  'assets/css/my.css',
   'assets/css/a11y.css',
   'assets/css/responsive.css',
   'assets/js/figure.js',
   'assets/js/data.js',
   'assets/js/exercises-extra.js',
   'assets/js/exercises-more.js',
+  'assets/js/exercises-plus.js',
   'assets/js/kalo.js',
   'assets/js/builder.js',
   'assets/js/core.js',
@@ -42,6 +44,7 @@ const PRECACHE = [
   'assets/js/workout.js',
   'assets/js/programs-plan.js',
   'assets/js/tracker.js',
+  'assets/js/my.js',
   'assets/js/share.js',
   'assets/js/app.js',
   'assets/js/parks.js',

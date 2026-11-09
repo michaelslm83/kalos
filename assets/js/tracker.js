@@ -7,7 +7,7 @@
   const HE_MONTHS = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
   const HE_DAYS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
   const FEEL = ['', '😮‍💨', '😓', '🙂', '😄', '🔥'];
-  const SRC = { quick: 'מודרך', plan: 'מהתוכנית', manual: 'ידני', challenge: 'אתגר', interval: 'אינטרוולים', test: 'מבחן' };
+  const SRC = { quick: 'מודרך', set: 'הסט שלי', plan: 'מהתוכנית', manual: 'ידני', challenge: 'אתגר', interval: 'אינטרוולים', test: 'מבחן' };
   const nf = (n) => Math.round(n).toLocaleString(KX.loc);
   const shortDate = (k) => { const d = dt.fromDk(k); return d.getDate() + '/' + (d.getMonth() + 1); };
   const longDate = (k) => dt.fromDk(k).toLocaleDateString(KX.loc, { weekday: 'short', day: 'numeric', month: 'short' });
@@ -395,7 +395,7 @@
     b.hidden = s.days < 1;
     $('span', b).textContent = s.days;
     b.title = `רצף של ${s.days} ימים`;
-    $('#navMe').setAttribute('aria-label', 'האימון שלי' + (s.days ? ` · רצף של ${s.days} ימים` : ''));
+    $('#navMe').setAttribute('aria-label', 'האזור האישי' + (s.days ? ` · רצף של ${s.days} ימים` : ''));
   }
 
   /* ---------- אירועים בדשבורד ---------- */

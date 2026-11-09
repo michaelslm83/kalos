@@ -127,6 +127,31 @@
     });
   }
 
+  /* ---------- המדריכים: Cali ו־Stheni ----------
+     שתי דמויות על אותו שלד (אותן תנוחות בדיוק), עם שכבת מראה משלהן: שיער, קוקו, סרט ראש, זקן.
+     השם מגיע מהמילה קליסתניקס: κάλλος (יופי) + σθένος (כוח). */
+  const COACHES = {
+    cali: { id: 'cali', name: 'Cali', g: 'f', color: '#ff6f91', hair: '#c8643a' },
+    stheni: { id: 'stheni', name: 'Stheni', g: 'm', color: '#38bdf8', hair: '#3b414a' },
+  };
+  const coachPref = () => {
+    /* KX.data (core.js) נטען אחרי הקובץ הזה, ויודע לעבוד גם כשהאחסון חסום */
+    try { const v = KX.data ? KX.data.prefs().coach : JSON.parse(localStorage.getItem('kalos.prefs') || '{}').coach; return COACHES[v] ? v : 'auto'; } catch (_) { return 'auto'; }
+  };
+  /* מדריך לתרגיל: לפי ההעדפה, ואם "מתחלפים" — לסירוגין בתוך כל קטגוריה (כך ששניהם מופיעים בכל סוג תרגיל) */
+  function coachFor(ex) {
+    const pref = coachPref();
+    if (pref !== 'auto') return pref;
+    if (ex && COACHES[ex.coach]) return ex.coach;
+    const list = (KX.exercises || []).filter((x) => x.cat === (ex && ex.cat));
+    let i = ex ? list.indexOf(ex) : -1;
+    if (i < 0) i = String((ex && ex.id) || '').split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    return i % 2 ? 'cali' : 'stheni';
+  }
+  /* "Cali מדגימה" / "Stheni מדגים" — התאמת מין בעברית */
+  const coachVerb = (id, f, m) => (COACHES[id] && COACHES[id].g === 'f' ? f : m);
+  const live = new Set(); /* נגנים פעילים — להחלפת מדריך בלי לבנות מחדש */
+
   /* ---------- נגן ---------- */
   class Player {
     constructor(svg, ex, opts) {
@@ -140,6 +165,10 @@
       this.idx = -1;
       this.good = ex.anim.frames().map((f) => Object.assign({}, f, { p: norm(f.p) }));
       this.bad = ex.anim.bad ? ex.anim.bad().map((f) => Object.assign({}, f, { p: norm(f.p) })) : null;
+      this.coach = COACHES[this.opts.coach] ? this.opts.coach : coachFor(ex);
+      this.side = 1;
+      if (live.size > 150) live.forEach((q) => { if (!q.svg.isConnected) live.delete(q); });
+      live.add(this);
       this.build();
       this.reset();
     }
@@ -174,14 +203,18 @@
       this.vb = vb;
       const svg = this.svg;
       svg.setAttribute('viewBox', vb.join(' '));
-      svg.setAttribute('class', (svg.getAttribute('class') || '') + ' fx');
+      svg.classList.add('fx');
+      svg.classList.remove('fx-c-cali', 'fx-c-stheni');
+      svg.classList.add('fx-c-' + this.coach);
       svg.innerHTML = '';
-      el('title', {}, svg).textContent = 'Kalo מדגים: ' + this.ex.name;
+      this.titleEl = el('title', {}, svg);
+      this.titleEl.textContent = COACHES[this.coach].name + ' ' + coachVerb(this.coach, 'מדגימה', 'מדגים') + ': ' + this.ex.name;
       this.gGear = el('g', {}, svg);
       const front = el('g', {});
       const hl = a.hl || [];
       const cls = (part) => 'fx-seg' + (hl.indexOf(part) > -1 ? ' fx-hl' : '');
       const floorY = (a.gear || []).find((o) => o.k === 'floor');
+      this.floorY = floorY ? floorY.y : null;
       if (floorY) this.shadow = el('ellipse', { cx: 240, cy: floorY.y + 2, rx: 60, ry: 5, class: 'fx-shadow' }, svg);
       const far = el('g', { class: 'fx-far' }, svg);
       this.leg2 = el('polyline', { class: cls('leg') + ' fx-leg' }, far);
@@ -189,7 +222,10 @@
       this.arm2 = el('polyline', { class: cls('arm') + ' fx-arm' }, far);
       this.torso = el('path', { class: cls('torso') + ' fx-torso' }, svg);
       this.neck = el('line', { class: 'fx-seg fx-neck' }, svg);
+      this.hairBack = el('g', { class: 'fx-hair-back' }, svg);
       this.head = el('circle', { r: L.head, class: 'fx-head' }, svg);
+      this.hairFront = el('g', { class: 'fx-hair-front' }, svg);
+      this.buildCoach();
       this.leg = el('polyline', { class: cls('leg') + ' fx-leg' }, svg);
       this.toe = el('line', { class: cls('leg') + ' fx-toe' }, svg);
       this.arm = el('polyline', { class: cls('arm') + ' fx-arm' }, svg);
@@ -202,6 +238,87 @@
         el('circle', { r: 4, class: 'fx-bar' }, this.wheel);
       }
       this.markEl = el('circle', { r: 20, class: 'fx-mark' }, svg);
+    }
+    /* שכבת המראה של המדריך: מאחורי הראש (קוקו / קצוות סרט) ומעליו (שיער, סרט, זקן) */
+    buildCoach() {
+      const b = this.hairBack, f = this.hairFront;
+      b.innerHTML = ''; f.innerHTML = '';
+      this.cEl = {};
+      if (this.coach === 'cali') {
+        this.cEl.tail = el('path', { class: 'fx-hair' }, b);
+        this.cEl.tie = el('circle', { r: 3, class: 'fx-tie' }, b);
+        this.cEl.cap = el('path', { class: 'fx-hair' }, f);
+      } else {
+        this.cEl.tails = el('path', { class: 'fx-band-tail' }, b);
+        this.cEl.cap = el('path', { class: 'fx-hair' }, f);
+        this.cEl.beard = el('path', { class: 'fx-hair fx-beard' }, f);
+        this.cEl.band = el('path', { class: 'fx-band' }, f);
+      }
+    }
+    setCoach(id) {
+      if (!COACHES[id] || id === this.coach) return;
+      this.coach = id;
+      this.svg.classList.remove('fx-c-cali', 'fx-c-stheni');
+      this.svg.classList.add('fx-c-' + id);
+      this.titleEl.textContent = COACHES[id].name + ' ' + coachVerb(id, 'מדגימה', 'מדגים') + ': ' + this.ex.name;
+      this.buildCoach();
+      if (this.lastPose) this.render(this.lastPose);
+    }
+    /* כיוון הפנים: לצד שאליו הברך מתכופפת ושאליו הירך מתקפלת (ניצב לציר הצוואר) */
+    faceDir(k, p) {
+      const dx = k.hip[0] - k.S[0], dy = k.hip[1] - k.S[1], dl = Math.hypot(dx, dy) || 1;
+      const nx = -dy / dl, ny = dx / dl;
+      const fa = Math.atan2(p.foot[1] - p.hip[1], p.foot[0] - p.hip[0]) + (p.ks || -1) * Math.PI / 2;
+      const s1 = Math.cos(fa) * nx + Math.sin(fa) * ny;
+      const tx = k.K[0] - k.hip[0], ty = k.K[1] - k.hip[1], tl = Math.hypot(tx, ty) || 1;
+      const sc = s1 * 0.6 + (tx * nx + ty * ny) / tl;
+      if (Math.abs(sc) > 0.12) this.side = sc > 0 ? 1 : -1; /* היסטרזיס: בלי הבהוב כשהאות חלש */
+      let ux = k.head[0] - k.S[0], uy = k.head[1] - k.S[1];
+      const ul = Math.hypot(ux, uy) || 1; ux /= ul; uy /= ul;
+      let fx = -uy, fy = ux;
+      if (fx * nx * this.side + fy * ny * this.side < 0) { fx = -fx; fy = -fy; }
+      return { ux, uy, fx, fy };
+    }
+    drawCoach(k, p) {
+      const c = this.cEl; if (!c) return;
+      const { ux, uy, fx, fy } = this.faceDir(k, p);
+      const H = k.head, r = L.head;
+      /* נקודה על הראש: θ=0 קודקוד, 90 פנים, ‎-90 עורף, 180 סנטר */
+      const V = (th, rr) => { const a = th * R; rr = rr == null ? r : rr; return [H[0] + rr * (ux * Math.cos(a) + fx * Math.sin(a)), H[1] + rr * (uy * Math.cos(a) + fy * Math.sin(a))]; };
+      const arc = (a0, a1, rr, n) => { const o = []; for (let i = 0; i <= n; i++) o.push(V(a0 + ((a1 - a0) * i) / n, rr)); return o; };
+      const P = (q) => f1(q[0]) + ',' + f1(q[1]);
+      const off = (q, x, y, m) => [q[0] + x * m, q[1] + y * m];
+      const floor = this.floorY;
+      const clampY = (q) => (floor != null && q[1] > floor - 2 ? [q[0], floor - 2] : q);
+      const sway = this.raf ? Math.sin(this.time / 240) * 1.6 : 0;
+      const bx = -fx, by = -fy; /* אחורה */
+      /* צורה מחודדת לאורך עקומה ריבועית (קוקו, קצוות הסרט) */
+      const taper = (a, ctl, e, w0) => {
+        const tx = ctl[0] - a[0], ty = ctl[1] - a[1], tl = Math.hypot(tx, ty) || 1, nx = -ty / tl, ny = tx / tl;
+        return 'M' + P(off(a, nx, ny, w0)) + ' Q' + P(off(ctl, nx, ny, w0 * 0.75)) + ' ' + P(e) + ' Q' + P(off(ctl, nx, ny, -w0 * 0.75)) + ' ' + P(off(a, nx, ny, -w0)) + 'Z';
+      };
+      if (this.coach === 'cali') {
+        const cap = arc(70, -132, r + 1.4, 20);
+        const inner = [H[0] + r * (ux * 0.3 - fx * 0.1), H[1] + r * (uy * 0.3 - fy * 0.1)];
+        c.cap.setAttribute('d', 'M' + cap.map(P).join(' L') + ' Q' + P(inner) + ' ' + P(cap[0]) + 'Z');
+        /* קוקו גבוה: יוצא מאחורי הקודקוד, מתעקל החוצה ונופל עם כוח המשיכה */
+        const root = V(-50, r + 1.5);
+        const ctl = clampY([root[0] + bx * 11 + ux * 5, root[1] + by * 11 + uy * 5]);
+        const end = clampY([root[0] + bx * 10 + sway, root[1] + by * 10 + 27]);
+        c.tail.setAttribute('d', taper(root, ctl, end, 5.6));
+        c.tie.setAttribute('cx', f1(root[0])); c.tie.setAttribute('cy', f1(root[1]));
+      } else {
+        const cap = arc(58, -112, r + 0.9, 10);
+        const inner = [H[0] + r * (ux * 0.42 - fx * 0.08), H[1] + r * (uy * 0.42 - fy * 0.08)];
+        c.cap.setAttribute('d', 'M' + cap.map(P).join(' L') + ' Q' + P(inner) + ' ' + P(cap[0]) + 'Z');
+        const jaw = arc(98, 196, r + 0.9, 8);
+        const jin = [H[0] + r * (fx * 0.3 - ux * 0.3), H[1] + r * (fy * 0.3 - uy * 0.3)];
+        c.beard.setAttribute('d', 'M' + jaw.map(P).join(' L') + ' Q' + P(jin) + ' ' + P(jaw[0]) + 'Z');
+        const a = V(74, r + 0.4), e = V(-102, r + 0.4), mid = [H[0] + ux * r * 0.42, H[1] + uy * r * 0.42];
+        c.band.setAttribute('d', 'M' + P(a) + ' Q' + P(mid) + ' ' + P(e));
+        const t1 = clampY([e[0] + bx * 11 + sway, e[1] + by * 11 + 7]), t2 = clampY([e[0] + bx * 8 - sway * 0.6, e[1] + by * 8 + 12]);
+        c.tails.setAttribute('d', taper(e, [e[0] + bx * 6, e[1] + by * 6 + 2], t1, 2.1) + taper(e, [e[0] + bx * 4, e[1] + by * 4 + 4], t2, 1.9));
+      }
     }
     total() { return this.seq.reduce((s, f) => s + f.d + f.h, 0); }
     reset() { this.time = this.seq[0].d; this.idx = -1; this.update(0); }
@@ -245,7 +362,8 @@
     }
     render(p) {
       const k = solve(p);
-      this.sk = k; /* שלד אחרון — לסימון שרירים בסרטוני Kalo */
+      this.sk = k; /* שלד אחרון — לסימון שרירים בסרטוני ההדרכה */
+      this.lastPose = p;
       this.torso.setAttribute('d', `M${f1(k.hip[0])},${f1(k.hip[1])} Q${f1(k.ctrl[0])},${f1(k.ctrl[1])} ${f1(k.S[0])},${f1(k.S[1])}`);
       this.neck.setAttribute('x1', f1(k.S[0])); this.neck.setAttribute('y1', f1(k.S[1]));
       this.neck.setAttribute('x2', f1(k.neck[0])); this.neck.setAttribute('y2', f1(k.neck[1]));
@@ -262,6 +380,7 @@
       if (k.E2) { this.arm2.style.display = ''; this.arm2.setAttribute('points', pts(k.S, k.E2, k.W2)); } else this.arm2.style.display = 'none';
       if (k.K2) { this.leg2.style.display = ''; this.leg2.setAttribute('points', pts(k.hip, k.K2, k.A2)); } else this.leg2.style.display = 'none';
       setLine(this.toe2, k.A2, k.toe2);
+      this.drawCoach(k, p);
       if (this.wheel) this.wheel.setAttribute('transform', `translate(${f1(k.W[0])},${f1(k.W[1])})`);
       [k.E, k.K, k.hip, k.S].forEach((p2, j) => { this.joints[j].setAttribute('cx', f1(p2[0])); this.joints[j].setAttribute('cy', f1(p2[1])); });
       if (this.shadow) {
@@ -280,4 +399,14 @@
   }
 
   KX.fig = { L, add, ang, pivotTorso, shoulderOf, lerpPose, solve, Player };
+  KX.coaches = COACHES;
+  KX.coachFor = coachFor;
+  KX.coachPref = coachPref;
+  KX.coachVerb = coachVerb;
+  /* החלפת מדריך מועדף: כל הדמויות בעמוד מתעדכנות מיד (חוץ מאלה שננעלו על מדריך מסוים).
+     נגן שה־SVG שלו כבר לא בדף יוצא מהרשימה */
+  KX.refreshCoaches = () => live.forEach((p) => {
+    if (!p.svg.isConnected) { live.delete(p); return; }
+    if (!p.opts.coach) p.setCoach(coachFor(p.ex));
+  });
 })();

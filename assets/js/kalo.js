@@ -1,5 +1,5 @@
-/* KALOS — סרטוני Kalo
-   סרטון קצר לכל תרגיל, בכיכובו של Kalo (הדמות המונפשת של האתר).
+/* KALOS — סרטוני הדרכה
+   סרטון קצר לכל תרגיל, בכיכובם של Cali או Stheni (המדריכים המונפשים של האתר, figure.js).
    הסרטון "מצולם" בזמן אמת ממנוע ההדגמות: וקטורי, חד בכל גודל, בלי קובצי וידאו ובלי רשת.
    פרקים: פתיחה · ביצוע (שרירים מסומנים) · צעד אחר צעד (הילוך איטי) · דגשים (זווית 2) ·
           טעויות (הביצוע השגוי, מסומן) · ככה נכון · סיכום.
@@ -72,16 +72,17 @@
     const g = player.good, b = player.bad;
     const Tg = sum(g), Tb = b ? sum(b) : 0;
     const cyc = (T, min) => (T >= min ? T : Math.ceil(min / T) * T);
-    const hold = /שנ/.test(ex.rx);
+    const hold = KX.parseRx(ex.rx).unit === 'sec'; /* "3×3–5 (ירידה 5 שנ׳)" = חזרות, לא החזקה */
     const cat = KX.cats[ex.cat], lvl = KX.levels[ex.level];
     const ms = muscleSpots(ex);
     const capNow = (p) => (p.seq[p.idx] ? p.seq[p.idx].c : '');
     const clean = (s) => String(s).replace(/^[✗✓]\s*/, '');
     const steps = ex.steps, cues = ex.cues.slice(0, 4), errs = ex.mistakes.slice(0, 4);
+    const cid = KX.coaches[o.coach] ? o.coach : KX.coachFor(ex), cn = KX.coaches[cid].name;
     const S = [];
     S.push({
       key: 'intro', name: 'פתיחה', dur: 3600, mode: 'good', speed: 0.4, zoom: [0.86, 1], off: g[0].d,
-      card: () => `<p class="km-eyebrow"><span class="km-dot"></span>Kalo מציג</p><h3>${esc(ex.name)}</h3><p class="km-en" dir="ltr">${esc(ex.en)}</p>
+      card: () => `<p class="km-eyebrow"><span class="km-dot"></span>${esc(cn)} ${KX.coachVerb(cid, 'מציגה', 'מציג')}</p><h3>${esc(ex.name)}</h3><p class="km-en" dir="ltr">${esc(ex.en)}</p>
         <p class="km-tags"><span style="--t:${cat.color}">${esc(cat.name)}</span><span>${esc(lvl)}</span><span>${esc(ex.equip)}</span></p>${o.rx ? `<p class="km-rx">במינון: <b>${esc(KX.bidi(o.rx))}</b>${o.note ? ` · ${esc(o.note)}` : ''}</p>` : ''}`,
     });
     S.push({
@@ -125,7 +126,7 @@
       card: () => `<p class="km-eyebrow"><span class="km-dot"></span>${esc(ex.name)} · סיכום</p>
         <dl class="km-sum"><div><dt>מינון מומלץ</dt><dd dir="ltr">${esc(ex.rx)}</dd></div><div><dt>ציוד</dt><dd>${esc(ex.equip)}</dd></div><div class="w"><dt>שרירים</dt><dd>${esc(ex.muscles.join(' · '))}</dd></div>
         <div><dt>קל יותר ↓</dt><dd>${esc(ex.easier)}</dd></div><div><dt>קשה יותר ↑</dt><dd>${esc(ex.harder)}</dd></div></dl>
-        <p class="km-sign"><b>Kalo</b> · KALOS <button type="button" class="km-again">${SVGI.replay}<span>צפה שוב</span></button></p>`,
+        <p class="km-sign"><b>${esc(cn)}</b> · KALOS <button type="button" class="km-again">${SVGI.replay}<span>צפה שוב</span></button></p>`,
     });
     if (o.cut === 'short') {
       /* רצועה: פתיחה קצרה, ביצוע, 2 טעויות, ככה נכון */
@@ -147,7 +148,9 @@
     constructor(host, ex, opts) {
       this.host = host;
       this.ex = ex;
-      this.opts = opts || {};
+      this.opts = Object.assign({}, opts);
+      this.coach = KX.coaches[this.opts.coach] ? this.opts.coach : KX.coachFor(ex);
+      this.opts.coach = this.coach;
       this.t = 0;
       this.raf = null;
       this.si = -1;
@@ -170,14 +173,14 @@
       r.className = 'kmov stage-dark paused';
       r.style.setProperty('--c', this.color);
       r.setAttribute('role', 'region');
-      r.setAttribute('aria-label', 'סרטון Kalo: ' + this.ex.name);
+      r.setAttribute('aria-label', 'סרטון הדרכה: ' + this.ex.name);
       r.innerHTML = `
         <div class="km-screen">
           <svg class="km-fig" aria-hidden="true" focusable="false"></svg>
           <svg class="km-anno" aria-hidden="true" focusable="false"></svg>
           <div class="km-labels" aria-hidden="true"></div>
           <div class="km-grade" aria-hidden="true"></div>
-          <div class="km-brand" aria-hidden="true"><span class="km-logo">K</span>KALO</div>
+          ${brand(this.coach, 'km-brand')}
           <div class="km-chip" aria-hidden="true"></div>
           <div class="km-count" aria-hidden="true"></div>
           <div class="km-card"></div>
@@ -255,7 +258,7 @@
       this.aspect = a;
       this.screen.style.aspectRatio = a < 1 ? '4 / 5' : '16 / 9';
       this.root.classList.toggle('km-sq', a < 1);
-      this.player = new KX.fig.Player(this.fig, this.ex, { fit: a });
+      this.player = new KX.fig.Player(this.fig, this.ex, { fit: a, coach: this.coach });
       /* מסגור: הדמות ברצועה האמצעית, מקום למעלה לתווית הפרק ולמטה לכתוביות */
       const v = this.player.vb, top = a < 1 ? 0.14 : 0.12, band = a < 1 ? 0.56 : 0.64;
       const H = v[3] / band, Wd = H * a;
@@ -521,7 +524,7 @@
     }
   }
 
-  /* תמונת שער לכרטיס: Kalo בתנוחה מאמצע התרגיל */
+  /* תמונת שער לכרטיס: המדריך בתנוחה מאמצע התרגיל */
   function poster(svg, ex) {
     svg.style.setProperty('--hl', KX.cats[ex.cat].color);
     const p = new KX.fig.Player(svg, ex, { fit: 16 / 9 });
@@ -535,5 +538,11 @@
     return script(ex, fake, o).total;
   }
 
-  KX.kalo = { Movie, poster, duration, fmt, muscleSpots };
+  /* תווית המדריך בפינת הסרטון ובכרטיסים: האות הראשונה + השם, בצבע הזהות */
+  function brand(id, cls) {
+    const c = KX.coaches[id] || KX.coaches.stheni;
+    return `<span class="${cls} coach-brand" style="--coach:${c.color}" aria-hidden="true" data-no-i18n><i>${c.name[0]}</i>${c.name}</span>`;
+  }
+
+  KX.kalo = { Movie, poster, duration, fmt, muscleSpots, brand };
 })();

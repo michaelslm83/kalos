@@ -95,7 +95,18 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .logo { display: inline-flex; align-items: center; gap: 11px; }
 .logo-mark { width: 38px; height: 38px; border-radius: 12px; background: var(--accent); display: grid; place-items: center; box-shadow: 0 6px 20px -6px rgba(var(--accent-rgb), 0.6); }
 .logo-mark svg { width: 24px; height: 24px; fill: none; stroke: var(--accent-ink); stroke-width: 2.6; stroke-linecap: round; }
-.logo-mark svg circle { fill: var(--accent-ink); stroke: none; }
+.logo-mark svg { stroke-linejoin: round; overflow: visible; }
+.logo-mark svg .lm-head { fill: var(--accent-ink); stroke: none; }
+/* נקודות השרירים בלוגו: לבנות עם מסגרת כהה, כמו בסרטוני ההדרכה, עם פעימה עדינה */
+.logo-mark svg .lm-pts circle { fill: #fff; stroke: var(--accent-ink); stroke-width: 1; transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: no-preference) {
+  .logo:hover .lm-pts circle, .logo:focus-visible .lm-pts circle { animation: lmPulse 1.1s ease-in-out infinite; }
+  .logo .lm-pts circle:nth-child(2) { animation-delay: 0.12s; }
+  .logo .lm-pts circle:nth-child(3) { animation-delay: 0.24s; }
+  .logo .lm-pts circle:nth-child(4) { animation-delay: 0.36s; }
+  .logo .lm-pts circle:nth-child(5) { animation-delay: 0.48s; }
+}
+@keyframes lmPulse { 50% { transform: scale(1.35); } }
 .logo-txt { font-family: var(--display); font-weight: 900; font-size: 1.3rem; letter-spacing: 0.08em; display: flex; flex-direction: column; line-height: 1; }
 .logo-txt small { font-family: var(--font); font-size: 0.68rem; letter-spacing: 0.02em; font-weight: 500; color: var(--muted); margin-top: 3px; }
 .nav nav { flex: 1; }
@@ -308,6 +319,19 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .fx-box { fill: rgba(255, 255, 255, 0.06); stroke: rgba(255, 255, 255, 0.15); }
 .fx-shadow { fill: rgba(0, 0, 0, 0.45); }
 .fx-wheel { fill: #0b0f14; stroke: #c3ccd5; stroke-width: 4; }
+/* המדריכים: Cali (קוקו, שיער ערמוני) ו־Stheni (שיער קצר, זקן, סרט ראש). צבעי הזהות מוגדרים גם ב־KX.coaches */
+.fx-c-cali { --hair: #c8643a; --coach: #ff6f91; }
+.fx-c-stheni { --hair: #3b414a; --coach: #38bdf8; }
+.fx-hair { fill: var(--hair); }
+.fx-hair-back .fx-hair { stroke: rgba(255, 255, 255, 0.18); stroke-width: 0.8; }
+.fx-tie { fill: var(--coach); }
+.fx-band { fill: none; stroke: var(--coach); stroke-width: 4.2; stroke-linecap: round; }
+.fx-band-tail { fill: var(--coach); }
+.fx-c-cali .fx-torso { stroke-width: 15.5; }
+.fx-c-cali .fx-arm { stroke-width: 9.6; }
+.fx-c-cali .fx-leg { stroke-width: 12.4; }
+.fx-c-stheni .fx-torso { stroke-width: 18.5; }
+.fx-c-stheni .fx-arm { stroke-width: 11.5; }
 
 /* ---------- progressions ---------- */
 .prog-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }

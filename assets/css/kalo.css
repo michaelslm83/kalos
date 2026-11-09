@@ -183,3 +183,9 @@ html.km-lock, html.km-lock body { overflow: hidden !important; }
   .kv-filters::-webkit-scrollbar { display: none; }
   .kv-filters .chip { flex: none; }
 }
+
+/* תווית המדריך (Cali / Stheni) בפינת הסרטון ובכרטיסי הסרטונים — צבע הזהות של המדריך */
+.km-brand.coach-brand { letter-spacing: 0.06em; }
+.km-brand.coach-brand i { display: grid; place-items: center; width: 1.9em; height: 1.9em; border-radius: 50%; background: var(--coach); color: #07090c; font-style: normal; letter-spacing: 0; }
+.kv-brand.coach-brand { letter-spacing: 0.06em; text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7); }
+.kv-brand.coach-brand i { border-radius: 50%; background: var(--coach); color: #07090c; }
